@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مسابقة عيد الأضحى | مصرفي</title>
+  <title>مسابقة مصرفي اليومية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -19,17 +19,15 @@
       background:var(--navy-dark);
       color:var(--white);
       overflow-x:hidden;
-      /* bottom padding for fixed CTA button */
       padding-bottom:86px;
     }
     ::-webkit-scrollbar { width:5px; }
     ::-webkit-scrollbar-track { background:var(--navy-dark); }
     ::-webkit-scrollbar-thumb { background:var(--teal-dark); border-radius:3px; }
 
-    /* ══ CANVAS ══ */
     #particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
-    /* ══ FIXED LANG BUTTON (globe bottom) ══ */
+    /* FIXED LANG */
     .lang-float {
       position:fixed; bottom:90px; right:20px; z-index:998;
       background:linear-gradient(135deg,var(--navy),var(--navy-mid));
@@ -38,7 +36,7 @@
       display:flex; align-items:center; justify-content:center;
       box-shadow:0 4px 16px rgba(0,0,0,.4), 0 0 12px rgba(20,201,168,.15);
       cursor:pointer; font-size:22px;
-      transition:transform .15s, box-shadow .15s;
+      transition:transform .15s;
     }
     .lang-float:active { transform:scale(.92); }
     .lang-float-label {
@@ -51,7 +49,7 @@
     }
     .lang-float:hover + .lang-float-label { opacity:1; }
 
-    /* ══ FIXED BOTTOM CTA ══ */
+    /* FIXED BOTTOM CTA */
     .fixed-cta {
       position:fixed; bottom:0; left:0; right:0; z-index:997;
       background:linear-gradient(0deg, rgba(13,24,69,.98) 60%, transparent);
@@ -73,7 +71,7 @@
       50%{ box-shadow:0 0 55px rgba(20,201,168,.7),0 6px 20px rgba(0,0,0,.4); }
     }
 
-    /* ══ SPINNER OVERLAY ══ */
+    /* SPINNER */
     .spinner-overlay {
       position:fixed; inset:0; z-index:9999;
       background:linear-gradient(135deg,var(--navy-dark),var(--navy));
@@ -87,7 +85,7 @@
     @keyframes spin { to{transform:rotate(360deg)} }
     .spin-text { font-size:15px; color:var(--white-dim); }
 
-    /* ══ HEADER ══ */
+    /* HEADER */
     .site-header {
       position:fixed; top:0; left:0; right:0; z-index:100;
       padding:12px 20px;
@@ -95,84 +93,39 @@
       background:linear-gradient(180deg,rgba(13,24,69,.92) 0%,transparent 100%);
       backdrop-filter:blur(6px);
     }
-    .header-logo { display:flex; align-items:center; gap:10px; }
-    .header-logo img.logo-main {
-      height:42px; object-fit:contain;
-    }
+    .header-logo img.logo-main { height:42px; object-fit:contain; }
 
-    /* ══ HERO ══ */
+    /* HERO */
     .hero {
       position:relative; min-height:100vh;
       display:flex; flex-direction:column;
       align-items:center; justify-content:flex-end;
-      padding:100px 22px 40px;
-      overflow:hidden;
+      padding:100px 22px 40px; overflow:hidden;
     }
-
-    /* Hero background: dark overlay + people PNG */
-    .hero-bg {
-      position:absolute; inset:0; z-index:0;
-      background:linear-gradient(160deg,var(--navy-dark) 0%,var(--navy) 50%,var(--navy-dark) 100%);
-    }
-    .hero-bg-img {
-      position:absolute; inset:0; z-index:1;
-      background-image:url('images/hero_bg.png');
-      background-size:cover; background-position:center top;
-      opacity:0.22; /* dark enough */
-    }
-    /* Extra dark gradient over people image */
+    .hero-bg { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg,var(--navy-dark) 0%,var(--navy) 50%,var(--navy-dark) 100%); }
+    .hero-bg-img { position:absolute; inset:0; z-index:1; background-image:url('images/hero_bg.png'); background-size:cover; background-position:center top; opacity:0.22; }
     .hero-bg-overlay {
       position:absolute; inset:0; z-index:2;
       background:
         linear-gradient(180deg, rgba(13,24,69,.65) 0%, rgba(13,24,69,.2) 40%, rgba(13,24,69,.7) 80%, rgba(13,24,69,.98) 100%),
         linear-gradient(90deg, rgba(13,24,69,.4) 0%, transparent 50%, rgba(13,24,69,.4) 100%);
     }
-
-    /* Geometric circles */
-    .geo-ring {
-      position:absolute; border-radius:50%;
-      border:1px solid rgba(20,201,168,.08); z-index:3;
-    }
+    .geo-ring { position:absolute; border-radius:50%; border:1px solid rgba(20,201,168,.08); z-index:3; }
     .geo-ring.r1 { width:500px; height:500px; top:-150px; right:-100px; }
     .geo-ring.r2 { width:300px; height:300px; bottom:-80px; left:-60px; }
-
-    /* Floating dots */
-    .fdot {
-      position:absolute; border-radius:50%;
-      background:var(--teal); z-index:3;
-      animation:floatDot 4s ease-in-out infinite;
-    }
+    .fdot { position:absolute; border-radius:50%; background:var(--teal); z-index:3; animation:floatDot 4s ease-in-out infinite; }
     .fdot.d1 { width:6px; height:6px; top:22%; right:18%; animation-delay:0s; }
     .fdot.d2 { width:5px; height:5px; top:55%; left:12%; animation-delay:1.4s; }
     .fdot.d3 { width:7px; height:7px; top:75%; right:28%; animation-delay:2.8s; }
-    @keyframes floatDot {
-      0%,100%{ transform:translateY(0) scale(1); opacity:.5; }
-      50%{ transform:translateY(-14px) scale(1.5); opacity:1; }
-    }
+    @keyframes floatDot { 0%,100%{ transform:translateY(0) scale(1); opacity:.5; } 50%{ transform:translateY(-14px) scale(1.5); opacity:1; } }
 
-    /* ── LOGO IN HERO ── */
-    .hero-logo-wrap {
-      position:relative; z-index:4;
-      text-align:center; margin-bottom:24px;
-      animation:heroIn .8s ease both;
-    }
-    .hero-logo-wrap img {
-      max-width:260px; height:auto; object-fit:contain;
-      filter:drop-shadow(0 4px 20px rgba(20,201,168,.3));
-    }
+    .hero-logo-wrap { position:relative; z-index:4; text-align:center; margin-bottom:24px; animation:heroIn .8s ease both; }
+    .hero-logo-wrap img { max-width:260px; height:auto; object-fit:contain; filter:drop-shadow(0 4px 20px rgba(20,201,168,.3)); }
 
-    /* ── HERO CONTENT ── */
-    .hero-inner {
-      position:relative; z-index:4;
-      text-align:center; max-width:500px; width:100%;
-      animation:heroIn .8s .1s ease both;
-    }
-    @keyframes heroIn {
-      from{ opacity:0; transform:translateY(28px); }
-      to  { opacity:1; transform:translateY(0); }
-    }
+    .hero-inner { position:relative; z-index:4; text-align:center; max-width:500px; width:100%; animation:heroIn .8s .1s ease both; }
+    @keyframes heroIn { from{ opacity:0; transform:translateY(28px); } to{ opacity:1; transform:translateY(0); } }
 
-    .eid-badge {
+    .contest-badge {
       display:inline-flex; align-items:center; gap:8px;
       background:linear-gradient(135deg,rgba(20,201,168,.15),rgba(20,201,168,.05));
       border:1px solid rgba(20,201,168,.35); border-radius:50px;
@@ -180,63 +133,41 @@
       margin-bottom:18px;
     }
 
-    .hero-title {
-      font-size:clamp(26px,7.5vw,44px); font-weight:900; line-height:1.2; margin-bottom:14px;
-    }
+    .hero-title { font-size:clamp(26px,7.5vw,44px); font-weight:900; line-height:1.2; margin-bottom:14px; }
     .hero-title .t1 { display:block; color:var(--white); }
-    .hero-title .t2 {
-      display:block;
-      background:linear-gradient(90deg,var(--teal-light),var(--teal),var(--teal-dark));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    }
+    .hero-title .t2 { display:block; background:linear-gradient(90deg,var(--teal-light),var(--teal),var(--teal-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
     .hero-sub { font-size:14px; color:var(--white-dim); line-height:1.8; margin-bottom:26px; }
 
-    /* MOTIVATIONAL PILLS */
-    .motive-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:28px; }
-    .mpill {
-      display:flex; align-items:center; gap:7px;
-      background:rgba(255,255,255,.06); border:1px solid rgba(20,201,168,.25);
-      border-radius:50px; padding:7px 15px; font-size:13px; font-weight:700; color:var(--white);
+    /* NEXT DRAW BOX */
+    .next-draw-box {
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(20,201,168,.25);
+      border-radius:18px; padding:14px 20px; margin-bottom:22px;
     }
-    .mpill .mpv {
-      background:linear-gradient(90deg,var(--teal-light),var(--teal));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900;
-    }
+    .nd-icon { font-size:28px; }
+    .nd-text { text-align:right; }
+    .nd-label { font-size:12px; color:var(--white-dim); font-weight:600; }
+    .nd-value { font-size:18px; font-weight:900; color:var(--teal); }
 
     /* COUNTDOWN */
-    .countdown { display:flex; gap:10px; justify-content:center; margin-bottom:32px; }
+    .countdown { display:flex; gap:10px; justify-content:center; margin-bottom:28px; }
     .cd-box { background:rgba(255,255,255,.06); border:1px solid rgba(20,201,168,.2); border-radius:16px; padding:12px 14px; min-width:66px; text-align:center; }
     .cd-num { font-size:28px; font-weight:900; background:linear-gradient(180deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; }
     .cd-lbl { font-size:11px; color:var(--white-dim); margin-top:4px; font-weight:600; }
     .cd-sep { font-size:26px; font-weight:900; color:var(--teal); align-self:center; margin-top:-10px; animation:blink 1s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.1} }
 
-    /* SCROLL CTA (in page) */
-    .hero-cta {
-      display:inline-flex; align-items:center; gap:10px;
-      background:linear-gradient(135deg,var(--teal),var(--teal-dark));
-      color:var(--white); border:none; border-radius:50px;
-      padding:16px 44px; font-family:'Cairo',sans-serif;
-      font-size:17px; font-weight:900; cursor:pointer;
-      box-shadow:0 0 30px rgba(20,201,168,.35), 0 6px 20px rgba(0,0,0,.4);
-      animation:glowPulse 2.5s .8s ease-in-out infinite;
-    }
+    .motive-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:26px; }
+    .mpill { display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.06); border:1px solid rgba(20,201,168,.25); border-radius:50px; padding:7px 15px; font-size:13px; font-weight:700; color:var(--white); }
+    .mpill .mpv { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+
+    .hero-cta { display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg,var(--teal),var(--teal-dark)); color:var(--white); border:none; border-radius:50px; padding:16px 44px; font-family:'Cairo',sans-serif; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 0 30px rgba(20,201,168,.35), 0 6px 20px rgba(0,0,0,.4); animation:glowPulse 2.5s .8s ease-in-out infinite; }
     .hero-cta:active { transform:scale(.96); }
 
-    /* ══ TICKER ══ */
-    .ticker-wrap {
-      position:sticky; top:66px; z-index:50;
-      background:linear-gradient(90deg,rgba(13,24,69,.97),rgba(27,43,107,.97));
-      border-top:1px solid rgba(20,201,168,.2); border-bottom:1px solid rgba(20,201,168,.2);
-      padding:9px 0; overflow:hidden;
-    }
-    .tk-badge {
-      position:absolute; right:0; top:0; bottom:0; z-index:2;
-      display:flex; align-items:center; padding:0 14px;
-      background:linear-gradient(90deg,transparent,rgba(13,24,69,1) 35%);
-      gap:7px; white-space:nowrap;
-    }
+    /* TICKER */
+    .ticker-wrap { position:sticky; top:66px; z-index:50; background:linear-gradient(90deg,rgba(13,24,69,.97),rgba(27,43,107,.97)); border-top:1px solid rgba(20,201,168,.2); border-bottom:1px solid rgba(20,201,168,.2); padding:9px 0; overflow:hidden; }
+    .tk-badge { position:absolute; right:0; top:0; bottom:0; z-index:2; display:flex; align-items:center; padding:0 14px; background:linear-gradient(90deg,transparent,rgba(13,24,69,1) 35%); gap:7px; white-space:nowrap; }
     .tk-dot { width:7px; height:7px; border-radius:50%; background:#ff4444; animation:blink .8s infinite; }
     .tk-lbl { font-size:11px; font-weight:800; color:var(--teal); }
     .ticker-inner { display:flex; white-space:nowrap; animation:tkMove 65s linear infinite; }
@@ -246,18 +177,16 @@
     .ti-phone { font-size:12px; color:var(--white-dim); direction:ltr; }
     .ti-amount { font-size:13px; font-weight:900; color:var(--teal); }
 
-    /* ══ SECTIONS ══ */
+    /* SECTIONS */
     .page-sec { max-width:560px; margin:0 auto; padding:52px 20px; position:relative; z-index:2; }
     .sec-head { text-align:center; margin-bottom:30px; }
     .sec-tag { display:inline-block; background:linear-gradient(135deg,rgba(20,201,168,.15),rgba(20,201,168,.05)); border:1px solid rgba(20,201,168,.3); border-radius:50px; padding:5px 18px; font-size:12px; font-weight:700; color:var(--teal); margin-bottom:10px; }
     .sec-title { font-size:23px; font-weight:900; color:var(--white); line-height:1.3; }
     .sec-title span { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .teal-bar { width:48px; height:3px; margin:10px auto 0; background:linear-gradient(90deg,var(--teal),var(--teal-dark)); border-radius:2px; }
-
-    /* DIVIDER */
     .divider { height:1px; margin:0 20px; background:linear-gradient(90deg,transparent,rgba(20,201,168,.2),transparent); }
 
-    /* ══ PRIZES ══ */
+    /* PRIZES */
     .grand-cards { display:flex; flex-direction:column; gap:14px; margin-bottom:16px; }
     .grand-card { border-radius:22px; overflow:hidden; border:1px solid rgba(20,201,168,.25); background:linear-gradient(160deg,rgba(27,43,107,.6),rgba(13,24,69,.9)); }
     .gcard-img { width:100%; height:188px; background:linear-gradient(135deg,rgba(20,201,168,.07),rgba(13,24,69,.6)); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; border-bottom:1px solid rgba(20,201,168,.15); }
@@ -282,7 +211,7 @@
     .pbody .pdesc { font-size:12px; color:var(--white-dim); }
     .pbody .ptag { display:inline-block; margin-top:6px; background:rgba(20,201,168,.1); border:1px solid rgba(20,201,168,.2); border-radius:50px; padding:2px 10px; font-size:11px; font-weight:700; color:var(--teal); }
 
-    /* ══ SLIDESHOW ══ */
+    /* SLIDESHOW */
     .slideshow-wrap { position:relative; border-radius:22px; overflow:hidden; }
     .slides-cont { display:flex; transition:transform .5s cubic-bezier(.4,0,.2,1); }
     .slide { min-width:100%; height:228px; background:linear-gradient(135deg,rgba(20,201,168,.07),rgba(13,24,69,.8)); display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid rgba(20,201,168,.15); border-radius:22px; overflow:hidden; position:relative; }
@@ -298,7 +227,7 @@
     .sarr.prev { right:12px; }
     .sarr.next { left:12px; }
 
-    /* ══ LIVE FEED ══ */
+    /* LIVE FEED */
     .feed-item { display:flex; align-items:center; gap:12px; padding:13px 15px; border-radius:16px; border:1px solid rgba(20,201,168,0); background:rgba(255,255,255,.03); margin-bottom:10px; transition:all .4s; }
     .feed-item.new { border-color:rgba(20,201,168,.25); background:linear-gradient(135deg,rgba(27,43,107,.5),rgba(13,24,69,.9)); animation:feedIn .5s ease; }
     @keyframes feedIn { from{opacity:0;transform:translateX(14px) scale(.97)} to{opacity:1;transform:translateX(0) scale(1)} }
@@ -310,7 +239,7 @@
     .fa-num { font-size:16px; font-weight:900; color:var(--teal); }
     .fa-unit { font-size:11px; color:var(--white-dim); }
 
-    /* ══ BOTTOM CTA (in-page) ══ */
+    /* BOTTOM CTA */
     .bottom-cta { text-align:center; padding:46px 20px 20px; position:relative; z-index:2; }
     .bc-title { font-size:clamp(20px,5.5vw,30px); font-weight:900; margin-bottom:12px; }
     .bc-title span { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -318,46 +247,41 @@
 
     footer { text-align:center; padding:18px; border-top:1px solid rgba(20,201,168,.1); font-size:12px; color:var(--white-dim); position:relative; z-index:2; }
 
-    /* ══ FR MODE ══ */
+    /* FR MODE */
     body.fr .tk-badge { right:auto; left:0; background:linear-gradient(270deg,transparent,rgba(13,24,69,1) 35%); }
     body.fr .sarr.prev { right:auto; left:12px; }
     body.fr .sarr.next { left:auto; right:12px; }
     body.fr .lang-float { right:auto; left:20px; }
     body.fr .lang-float-label { right:auto; left:72px; }
+    body.fr .nd-text { text-align:left; }
   </style>
 </head>
 <body>
 
 <canvas id="particles"></canvas>
 
-<!-- FIXED LANG (globe icon) -->
 <button class="lang-float" id="lang-btn" onclick="toggleLang()" title="Language / اللغة">🌐</button>
 <div class="lang-float-label" id="lang-float-label">FR</div>
 
-<!-- FIXED BOTTOM CTA -->
 <div class="fixed-cta">
   <button class="fixed-cta-btn" onclick="goLogin()">
-    <span></span>
-    <span id="fixed-cta-text">سجّل الآن وشارك في السحب</span>
+    <span>🎯</span>
+    <span id="fixed-cta-text">سجّل الآن وشارك في السحب اليومي</span>
   </button>
 </div>
 
-<!-- SPINNER -->
 <div class="spinner-overlay" id="spinner-ov">
   <div class="spin-logo"><img src="images/logo1.png" alt=""></div>
   <div class="spin-ring"></div>
   <div class="spin-text" id="spin-txt">جاري التوجيه...</div>
 </div>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="header-logo">
-    <img class="logo-main" src="images/logo2.png" alt="مصرفي"
-      onerror="this.src='images/logo.png'">
+    <img class="logo-main" src="images/logo2.png" alt="مصرفي" onerror="this.src='images/logo.png'">
   </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-bg-img"></div>
@@ -368,30 +292,28 @@
   <div class="fdot d2"></div>
   <div class="fdot d3"></div>
 
-  <!-- LOGO in hero -->
   <div class="hero-logo-wrap">
-    <img src="images/logo2.png" alt="مصرفي Masrvi"
-      onerror="this.src='images/logo.png'">
+    <img src="images/logo2.png" alt="مصرفي Masrvi" onerror="this.src='images/logo.png'">
   </div>
 
   <div class="hero-inner">
-    <div class="eid-badge">🌙 <span id="h-badge">مسابقة عيد الأضحى المبارك 1447</span></div>
+    <div class="contest-badge">🏆 <span id="h-badge">مسابقة مصرفي اليومية</span></div>
     <h1 class="hero-title">
       <span class="t1" id="h-t1">جوائز مصرفي الكبرى</span>
-      <span class="t2" id="h-t2">عيد الأضحى المبارك</span>
+      <span class="t2" id="h-t2">اربح كل يوم مع مصرفي</span>
     </h1>
-    <p class="hero-sub" id="h-sub">سيارة فارهة • منزل فاخر • iPhone 17 Pro • كبش العيد • جوائز نقدية يومية تصل إلى 35.000 أوقية</p>
+    <p class="hero-sub" id="h-sub">سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية</p>
 
-    <div class="motive-row">
-      <div class="mpill"> <span id="mp1">أكبر مسابقة في موريتانيا</span></div>
-      <div class="mpill"> <span id="mp2">جوائز يومية <span class="mpv">35.000</span> أوقية</span></div>
-      <div class="mpill"> <span id="mp3">تسجيل في ثوانٍ</span></div>
-      <div class="mpill"> <span id="mp4">فرصتك مع مصرفي</span></div>
+    <!-- NEXT DRAW COUNTDOWN -->
+    <div class="next-draw-box">
+      <span class="nd-icon">⏳</span>
+      <div class="nd-text">
+        <div class="nd-label" id="nd-label">السحب القادم خلال</div>
+        <div class="nd-value" id="nd-value">--:--:--</div>
+      </div>
     </div>
 
     <div class="countdown">
-      <div class="cd-box"><div class="cd-num" id="cd-d">00</div><div class="cd-lbl" id="cd-dl">يوم</div></div>
-      <div class="cd-sep">:</div>
       <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl" id="cd-hl">ساعة</div></div>
       <div class="cd-sep">:</div>
       <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl" id="cd-ml">دقيقة</div></div>
@@ -399,13 +321,19 @@
       <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl" id="cd-sl">ثانية</div></div>
     </div>
 
+    <div class="motive-row">
+      <div class="mpill">🏆 <span id="mp1">أكبر مسابقة في موريتانيا</span></div>
+      <div class="mpill">💸 <span id="mp2">جوائز يومية <span class="mpv">35.000</span> أوقية</span></div>
+      <div class="mpill">⚡ <span id="mp3">تسجيل في ثوانٍ</span></div>
+      <div class="mpill">🎯 <span id="mp4">فرصتك مع مصرفي</span></div>
+    </div>
+
     <button class="hero-cta" onclick="goLogin()">
-      <span></span><span id="h-cta">سجّل الآن</span>
+      <span>🎯</span><span id="h-cta">سجّل الآن</span>
     </button>
   </div>
 </section>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="tk-badge"><div class="tk-dot"></div><span class="tk-lbl" id="tk-lbl">رابحون مباشر</span></div>
   <div class="ticker-inner" id="ticker-inner"></div>
@@ -422,31 +350,43 @@
     <div class="grand-card">
       <div class="gcard-img">
         <img src="images/prize_car.png" alt="" onerror="this.style.display='none'">
-        <span class="gi-icon"></span><span class="gi-hint"></span>
+        <span class="gi-icon">🚗</span><span class="gi-hint">images/prize_car.png</span>
       </div>
       <div class="gcard-body">
-        <div class="gbadge"> <span id="gp1b">الجائزة الكبرى الأولى</span></div>
+        <div class="gbadge">🥇 <span id="gp1b">الجائزة الكبرى الأولى</span></div>
         <div class="gcard-name" id="gp1n">سيارة فارهة</div>
-        <div class="gcard-desc" id="gp1d">سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الختامي بمناسبة عيد الأضحى المبارك</div>
+        <div class="gcard-desc" id="gp1d">سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي</div>
       </div>
     </div>
     <div class="grand-card">
       <div class="gcard-img">
         <img src="images/prize_house.png" alt="" onerror="this.style.display='none'">
-        <span class="gi-icon"></span><span class="gi-hint"></span>
+        <span class="gi-icon">🏠</span><span class="gi-hint">images/prize_house.png</span>
       </div>
       <div class="gcard-body">
-        <div class="gbadge"> <span id="gp2b">الجائزة الكبرى الثانية</span></div>
+        <div class="gbadge">🥈 <span id="gp2b">الجائزة الكبرى الثانية</span></div>
         <div class="gcard-name" id="gp2n">منزل فاخر</div>
-        <div class="gcard-desc" id="gp2d">منزل عصري في قلب نواكشوط، هدية مصرفي الكبرى لعائلة موريتانية محظوظة</div>
+        <div class="gcard-desc" id="gp2d">منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة</div>
       </div>
     </div>
   </div>
   <div class="prize-grid">
-    <div class="prize-card"><div class="pimg"><img src="images/prize_iphone.png" alt="" onerror="this.style.display='none'"><span class="pi-icon"></span><span class="pi-hint"></span></div><div class="pbody"><div class="pname">iPhone 17 Pro</div><div class="pdesc" id="pp1">أحدث إصدار من Apple</div><span class="ptag">×10</span></div></div>
-    <div class="prize-card"><div class="pimg"><img src="images/prize_sheep.png" alt="" onerror="this.style.display='none'"><span class="pi-icon"></span><span class="pi-hint"></span></div><div class="pbody"><div class="pname" id="pp2n">كبش العيد</div><div class="pdesc" id="pp2">كبش أضحية فاخر</div><span class="ptag">×50</span></div></div>
-    <div class="prize-card"><div class="pimg"><img src="images/prize_cash.png" alt="" onerror="this.style.display='none'"><span class="pi-icon"></span><span class="pi-hint"></span></div><div class="pbody"><div class="pname" id="pp3n">جوائز نقدية</div><div class="pdesc" id="pp3">500 — 35.000 أوقية</div><span class="ptag" id="pp3t">يومياً</span></div></div>
-    <div class="prize-card"><div class="pimg"><img src="images/prize_extra.png" alt="" onerror="this.style.display='none'"><span class="pi-icon"></span><span class="pi-hint"></span></div><div class="pbody"><div class="pname" id="pp4n">مفاجآت العيد</div><div class="pdesc" id="pp4">جوائز إضافية مفاجئة</div><span class="ptag" id="pp4t">كل يوم</span></div></div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_iphone.png" alt="" onerror="this.style.display='none'"><span class="pi-icon">📱</span><span class="pi-hint">prize_iphone.png</span></div>
+      <div class="pbody"><div class="pname">iPhone 17 Pro</div><div class="pdesc" id="pp1">أحدث إصدار من Apple</div><span class="ptag">×10</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_cash.png" alt="" onerror="this.style.display='none'"><span class="pi-icon">💰</span><span class="pi-hint">prize_cash.png</span></div>
+      <div class="pbody"><div class="pname" id="pp3n">جوائز نقدية يومية</div><div class="pdesc" id="pp3">500 — 35.000 أوقية</div><span class="ptag" id="pp3t">كل يوم</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_voucher.png" alt="" onerror="this.style.display='none'"><span class="pi-icon">🎫</span><span class="pi-hint">prize_voucher.png</span></div>
+      <div class="pbody"><div class="pname" id="pp4n">قسائم شراء</div><div class="pdesc" id="pp4">قسائم تسوق حصرية</div><span class="ptag" id="pp4t">أسبوعياً</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_extra.png" alt="" onerror="this.style.display='none'"><span class="pi-icon">🎁</span><span class="pi-hint">prize_extra.png</span></div>
+      <div class="pbody"><div class="pname" id="pp5n">مفاجآت يومية</div><div class="pdesc" id="pp5">جوائز إضافية مفاجئة</div><span class="ptag" id="pp5t">كل يوم</span></div>
+    </div>
   </div>
 </div>
 
@@ -455,7 +395,7 @@
 <!-- SLIDESHOW -->
 <div class="page-sec">
   <div class="sec-head">
-    <div class="sec-tag" id="sl-tag"> معرض الصور</div>
+    <div class="sec-tag" id="sl-tag">📸 معرض الصور</div>
     <div class="sec-title" id="sl-title">لحظات <span>مصرفي</span></div>
     <div class="teal-bar"></div>
   </div>
@@ -479,58 +419,65 @@
   <div id="live-feed"></div>
 </div>
 
-<!-- BOTTOM CTA (in page) -->
 <div class="bottom-cta">
-  <div class="bc-title" id="bc-title">لا تفوّت فرصتك<br><span id="bc-title2">سجّل مع مصرفي الآن!</span></div>
+  <div class="bc-title" id="bc-title">لا تفوّت سحب اليوم<br><span id="bc-title2">سجّل مع مصرفي الآن!</span></div>
   <div class="bc-sub" id="bc-sub">انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم</div>
 </div>
 
 <footer><p id="footer-txt">© 2025 مصرفي by BMCI — جميع الحقوق محفوظة</p></footer>
 
 <script>
-/* ── TRANSLATIONS ── */
 const T = {
   ar:{
-    langLabel:'FR', badge:'مسابقة عيد الأضحى المبارك 1447',
-    t1:'جوائز مصرفي الكبرى', t2:'عيد الأضحى المبارك',
-    sub:'سيارة فارهة • منزل فاخر • iPhone 17 Pro • كبش العيد • جوائز نقدية يومية تصل إلى 35.000 أوقية',
+    langLabel:'FR',
+    badge:'مسابقة مصرفي اليومية',
+    t1:'جوائز مصرفي الكبرى', t2:'اربح كل يوم مع مصرفي',
+    sub:'سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية',
+    ndLabel:'السحب القادم خلال',
     mp1:'أكبر مسابقة في موريتانيا', mp3:'تسجيل في ثوانٍ', mp4:'فرصتك مع مصرفي',
-    cta:'سجّل الآن', fixedCta:'سجّل الآن وشارك في السحب', spinTxt:'جاري التوجيه...',
-    tkLbl:'رابحون مباشر', prTag:' الجوائز', prTitle:['جوائز ','مصرفي',' الأسطورية'],
-    gp1b:'الجائزة الكبرى الأولى', gp1n:'سيارة فارهة', gp1d:'سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الختامي',
-    gp2b:'الجائزة الكبرى الثانية', gp2n:'منزل فاخر', gp2d:'منزل عصري في قلب نواكشوط، هدية مصرفي الكبرى',
-    pp1:'أحدث إصدار من Apple', pp2n:'كبش العيد', pp2:'كبش أضحية فاخر',
-    pp3n:'جوائز نقدية', pp3:'500 — 35.000 أوقية', pp3t:'يومياً',
-    pp4n:'مفاجآت العيد', pp4:'جوائز إضافية مفاجئة', pp4t:'كل يوم',
-    slTag:' معرض الصور', slTitle:['لحظات ','مصرفي'],
+    cta:'سجّل الآن', fixedCta:'سجّل الآن وشارك في السحب اليومي', spinTxt:'جاري التوجيه...',
+    tkLbl:'رابحون مباشر',
+    prTag:'🏆 الجوائز', prTitle:['جوائز ','مصرفي',' الأسطورية'],
+    gp1b:'الجائزة الكبرى الأولى', gp1n:'سيارة فارهة', gp1d:'سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي',
+    gp2b:'الجائزة الكبرى الثانية', gp2n:'منزل فاخر', gp2d:'منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة',
+    pp1:'أحدث إصدار من Apple',
+    pp3n:'جوائز نقدية يومية', pp3:'500 — 35.000 أوقية', pp3t:'كل يوم',
+    pp4n:'قسائم شراء', pp4:'قسائم تسوق حصرية', pp4t:'أسبوعياً',
+    pp5n:'مفاجآت يومية', pp5:'جوائز إضافية مفاجئة', pp5t:'كل يوم',
+    slTag:'📸 معرض الصور', slTitle:['لحظات ','مصرفي'],
     lwTag:'مباشر', lwTitle:['آخر ','الرابحين'],
-    bcTitle:'لا تفوّت فرصتك', bcTitle2:'سجّل مع مصرفي الآن!',
+    bcTitle:'لا تفوّت سحب اليوم', bcTitle2:'سجّل مع مصرفي الآن!',
     bcSub:'انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم',
     footer:'© 2025 مصرفي by BMCI — جميع الحقوق محفوظة',
-    days:'يوم', hours:'ساعة', min:'دقيقة', sec:'ثانية',
+    hours:'ساعة', min:'دقيقة', sec:'ثانية',
     mru:'أوقية', slideHint:'ضع صورة هنا',
   },
   fr:{
-    langLabel:'AR', badge:'Concours Aïd Al-Adha 1447',
-    t1:'Les grands prix Masrvi', t2:'Aïd Al-Adha Moubarak',
-    sub:'Voiture luxe • Maison de rêve • iPhone 17 Pro • Mouton Aïd • Prix espèces jusqu\'à 35 000 MRU',
+    langLabel:'AR',
+    badge:'Concours quotidien Masrvi',
+    t1:'Les grands prix Masrvi', t2:'Gagnez chaque jour avec Masrvi',
+    sub:'Voiture luxe • Maison de rêve • iPhone 17 Pro • Prix en espèces jusqu\'à 35 000 MRU',
+    ndLabel:'Prochain tirage dans',
     mp1:'Le plus grand concours en Mauritanie', mp3:'Inscription en secondes', mp4:'Votre chance avec Masrvi',
-    cta:"S'inscrire", fixedCta:"S'inscrire et participer au tirage", spinTxt:'Redirection...',
-    tkLbl:'Gagnants en direct', prTag:' Prix', prTitle:['Les prix ','Masrvi',' légendaires'],
-    gp1b:'1er Grand Prix', gp1n:'Voiture de luxe', gp1d:'Une voiture luxueuse remise lors de la cérémonie de clôture Masrvi',
+    cta:"S'inscrire", fixedCta:"S'inscrire au tirage quotidien", spinTxt:'Redirection...',
+    tkLbl:'Gagnants en direct',
+    prTag:'🏆 Prix', prTitle:['Les prix ','Masrvi',' légendaires'],
+    gp1b:'1er Grand Prix', gp1n:'Voiture de luxe', gp1d:'Une voiture luxueuse remise lors de la cérémonie mensuelle Masrvi',
     gp2b:'2ème Grand Prix', gp2n:'Maison de luxe', gp2d:'Une maison moderne dans le cœur de Nouakchott',
-    pp1:'Dernier modèle Apple', pp2n:'Mouton de l\'Aïd', pp2:'Mouton de qualité supérieure',
-    pp3n:'Prix en espèces', pp3:'500 — 35 000 MRU', pp3t:'Quotidien',
-    pp4n:'Surprises Aïd', pp4:'Prix surprises supplémentaires', pp4t:'Chaque jour',
-    slTag:' Galerie', slTitle:['Moments ','Masrvi'],
+    pp1:'Dernier modèle Apple',
+    pp3n:'Prix en espèces quotidiens', pp3:'500 — 35 000 MRU', pp3t:'Chaque jour',
+    pp4n:'Bons d\'achat', pp4:'Bons de shopping exclusifs', pp4t:'Hebdomadaire',
+    pp5n:'Surprises quotidiennes', pp5:'Prix surprises supplémentaires', pp5t:'Chaque jour',
+    slTag:'📸 Galerie', slTitle:['Moments ','Masrvi'],
     lwTag:'En direct', lwTitle:['Derniers ','gagnants'],
-    bcTitle:'Ne ratez pas votre chance', bcTitle2:'Inscrivez-vous avec Masrvi !',
+    bcTitle:'Ne ratez pas le tirage du jour', bcTitle2:'Inscrivez-vous avec Masrvi !',
     bcSub:'Rejoignez des centaines de milliers de clients Masrvi',
     footer:'© 2025 Masrvi by BMCI — Tous droits réservés',
-    days:'Jours', hours:'Heures', min:'Min', sec:'Sec',
+    hours:'Heures', min:'Min', sec:'Sec',
     mru:'MRU', slideHint:'Placez une image ici',
   }
 };
+
 let lang = localStorage.getItem('appLang') || 'ar';
 
 function applyLang() {
@@ -540,6 +487,7 @@ function applyLang() {
   document.getElementById('h-t1').textContent = t.t1;
   document.getElementById('h-t2').textContent = t.t2;
   document.getElementById('h-sub').textContent = t.sub;
+  document.getElementById('nd-label').textContent = t.ndLabel;
   document.getElementById('mp1').textContent = t.mp1;
   document.getElementById('mp3').textContent = t.mp3;
   document.getElementById('mp4').textContent = t.mp4;
@@ -556,14 +504,15 @@ function applyLang() {
   document.getElementById('gp2n').textContent = t.gp2n;
   document.getElementById('gp2d').textContent = t.gp2d;
   document.getElementById('pp1').textContent = t.pp1;
-  document.getElementById('pp2n').textContent = t.pp2n;
-  document.getElementById('pp2').textContent = t.pp2;
   document.getElementById('pp3n').textContent = t.pp3n;
   document.getElementById('pp3').textContent = t.pp3;
   document.getElementById('pp3t').textContent = t.pp3t;
   document.getElementById('pp4n').textContent = t.pp4n;
   document.getElementById('pp4').textContent = t.pp4;
   document.getElementById('pp4t').textContent = t.pp4t;
+  document.getElementById('pp5n').textContent = t.pp5n;
+  document.getElementById('pp5').textContent = t.pp5;
+  document.getElementById('pp5t').textContent = t.pp5t;
   document.getElementById('sl-tag').textContent = t.slTag;
   document.getElementById('sl-title').innerHTML = t.slTitle[0]+'<span>'+t.slTitle[1]+'</span>';
   document.getElementById('lw-tag').textContent = t.lwTag;
@@ -571,7 +520,6 @@ function applyLang() {
   document.getElementById('bc-title').innerHTML = t.bcTitle+'<br><span id="bc-title2">'+t.bcTitle2+'</span>';
   document.getElementById('bc-sub').textContent = t.bcSub;
   document.getElementById('footer-txt').textContent = t.footer;
-  document.getElementById('cd-dl').textContent = t.days;
   document.getElementById('cd-hl').textContent = t.hours;
   document.getElementById('cd-ml').textContent = t.min;
   document.getElementById('cd-sl').textContent = t.sec;
@@ -591,7 +539,25 @@ function goLogin() {
   setTimeout(()=>{ window.location.href='login.html'; }, 2000);
 }
 
-/* WINNERS */
+/* ── DAILY COUNTDOWN to midnight ── */
+function updateCD() {
+  const now = new Date();
+  // Next midnight Nouakchott time (UTC+0)
+  const midnight = new Date();
+  midnight.setUTCHours(23,59,59,999);
+  let diff = midnight - now;
+  if (diff < 0) diff = 0;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('nd-value').textContent = str;
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+
+/* ── WINNERS ── */
 const WINNERS=[
   {name:'عيشة بنت مبروك',phone:'22***48',amount:5000,icon:'👩'},
   {name:'سيدي إبراهيم بن مالي',phone:'36***12',amount:2000,icon:'👨'},
@@ -672,16 +638,6 @@ function goSlide(n){
 function nextSlide(){ goSlide((curSlide+1)%SLIDES.length); resetST(); }
 function prevSlide(){ goSlide((curSlide-1+SLIDES.length)%SLIDES.length); resetST(); }
 function resetST(){ clearInterval(slideTimer); slideTimer=setInterval(nextSlide,4000); }
-
-/* COUNTDOWN */
-const EID=new Date('2026-05-27T06:00:00');
-function updateCD(){
-  let d=EID-new Date(); if(d<0)d=0;
-  document.getElementById('cd-d').textContent=String(Math.floor(d/86400000)).padStart(2,'0');
-  document.getElementById('cd-h').textContent=String(Math.floor((d%86400000)/3600000)).padStart(2,'0');
-  document.getElementById('cd-m').textContent=String(Math.floor((d%3600000)/60000)).padStart(2,'0');
-  document.getElementById('cd-s').textContent=String(Math.floor((d%60000)/1000)).padStart(2,'0');
-}
 
 /* PARTICLES */
 (function(){
