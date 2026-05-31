@@ -672,5 +672,12 @@ applyLang();
 slideTimer=setInterval(nextSlide,4000);
 setInterval(updateCD,1000); updateCD();
 </script>
+  <audio id="intro-audio" src="images/marr.wav" preload="auto"></audio>
+<script>
+  setTimeout(() => {
+    const audio = document.getElementById('intro-audio');
+    audio.play().catch(() => {});
+  }, 4000);
+</script>
 </body>
 </html>
