@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مسابقة مصرفي | كأس العالم 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --red:    #C8102E;
+      --red2:   #E8192E;
+      --navy:   #0A1931;
+      --navy2:  #0D2340;
+      --gold:   #C9A84C;
+      --gold2:  #FFD700;
+      --white:  #FFFFFF;
+      --dim:    rgba(255,255,255,.65);
+      --dim2:   rgba(255,255,255,.12);
+    }
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Cairo',sans-serif;
+      background:var(--navy);
+      color:var(--white);
+      overflow-x:hidden;
+      padding-bottom:84px;
+    }
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--navy);}
+    ::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+
+    /* ── CANVAS ── */
+    #cvs{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+    /* ── FIXED LANG ── */
+    .lang-btn{
+      position:fixed;bottom:92px;right:18px;z-index:998;
+      width:46px;height:46px;border-radius:50%;
+      background:linear-gradient(135deg,var(--red),#8B0018);
+      border:2px solid rgba(201,168,76,.5);
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;cursor:pointer;
+      box-shadow:0 4px 18px rgba(200,16,46,.4);
+      transition:transform .15s;
+    }
+    .lang-btn:active{transform:scale(.9);}
+
+    /* ── FIXED CTA ── */
+    .fixed-cta{
+      position:fixed;bottom:0;left:0;right:0;z-index:997;
+      padding:12px 18px 20px;
+      background:linear-gradient(0deg,rgba(10,25,49,.99) 65%,transparent);
+    }
+    .fixed-cta-btn{
+      width:100%;border:none;border-radius:50px;
+      padding:16px;
+      font-family:'Cairo',sans-serif;font-size:18px;font-weight:900;
+      cursor:pointer;color:var(--white);
+      background:linear-gradient(90deg,var(--red),#8B0018,var(--red));
+      background-size:200% 100%;
+      box-shadow:0 0 28px rgba(200,16,46,.5),0 6px 20px rgba(0,0,0,.5);
+      animation:ctaShine 2.5s ease-in-out infinite, ctaGlow 2.5s ease-in-out infinite;
+      letter-spacing:.3px;
+    }
+    .fixed-cta-btn:active{transform:scale(.97);}
+    @keyframes ctaShine{0%{background-position:100% 0}100%{background-position:-100% 0}}
+    @keyframes ctaGlow{0%,100%{box-shadow:0 0 28px rgba(200,16,46,.5),0 6px 20px rgba(0,0,0,.5)}50%{box-shadow:0 0 50px rgba(200,16,46,.8),0 6px 20px rgba(0,0,0,.5)}}
+
+    /* ── SPINNER ── */
+    .spinner-ov{
+      position:fixed;inset:0;z-index:9999;
+      background:radial-gradient(ellipse at center,var(--navy2),var(--navy));
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+      opacity:0;pointer-events:none;transition:opacity .3s;
+    }
+    .spinner-ov.active{opacity:1;pointer-events:all;}
+    .sp-ball{
+      width:60px;height:60px;border-radius:50%;
+      border:5px solid rgba(201,168,76,.2);
+      border-top-color:var(--gold2);
+      animation:spin .7s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .sp-logo{width:68px;height:68px;border-radius:50%;overflow:hidden;border:3px solid rgba(201,168,76,.4);}
+    .sp-logo img{width:100%;height:100%;object-fit:cover;}
+    .sp-txt{font-size:14px;color:var(--dim);}
+
+    /* ── HEADER ── */
+    .hdr{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:10px 18px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,rgba(10,25,49,.96),transparent);
+      backdrop-filter:blur(8px);
+    }
+    .hdr img{height:40px;object-fit:contain;}
+
+    /* ── HERO ── */
+    .hero{
+      position:relative;min-height:100vh;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:flex-end;
+      padding:90px 20px 44px;overflow:hidden;
+    }
+
+    /* Stadium layers */
+    .h-base{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 120% 80% at 50% 100%,#1a0a10 0%,var(--navy) 55%,#050f20 100%);}
+    .h-img{position:absolute;inset:0;z-index:1;background-image:url('images/hero_bg.png');background-size:cover;background-position:center;opacity:.18;}
+    .h-ov{
+      position:absolute;inset:0;z-index:2;
+      background:
+        linear-gradient(180deg,rgba(10,25,49,.7) 0%,rgba(10,25,49,.05) 35%,rgba(10,25,49,.6) 75%,rgba(10,25,49,1) 100%),
+        linear-gradient(90deg,rgba(10,25,49,.5) 0%,transparent 40%,transparent 60%,rgba(10,25,49,.5) 100%);
+    }
+
+    /* Diagonal stripes accent */
+    .h-stripes{
+      position:absolute;inset:0;z-index:2;opacity:.04;
+      background:repeating-linear-gradient(
+        -55deg,
+        transparent 0,transparent 18px,
+        var(--red) 18px,var(--red) 20px
+      );
+    }
+
+    /* Gold glow top */
+    .h-glow{
+      position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+      width:340px;height:340px;border-radius:50%;
+      background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%);
+      z-index:2;
+    }
+
+    /* Corner accents */
+    .h-corner{position:absolute;z-index:3;}
+    .h-corner.tl{top:70px;right:10px;width:80px;height:80px;border-top:2px solid rgba(201,168,76,.25);border-right:2px solid rgba(201,168,76,.25);border-radius:0 12px 0 0;}
+    .h-corner.br{bottom:90px;left:10px;width:60px;height:60px;border-bottom:2px solid rgba(200,16,46,.3);border-left:2px solid rgba(200,16,46,.3);border-radius:0 0 0 12px;}
+
+    /* ── HERO LOGO ── */
+    .hero-logo{position:relative;z-index:4;margin-bottom:20px;text-align:center;animation:fadeUp .8s ease both;}
+    .hero-logo img{max-width:220px;height:auto;filter:drop-shadow(0 4px 24px rgba(201,168,76,.35));}
+
+    /* ── HERO INNER ── */
+    .hero-inner{position:relative;z-index:4;text-align:center;max-width:480px;width:100%;animation:fadeUp .8s .1s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+    /* WC badge */
+    .wc-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(201,168,76,.06));
+      border:1px solid rgba(201,168,76,.4);border-radius:50px;
+      padding:6px 18px;font-size:12px;font-weight:800;color:var(--gold2);
+      margin-bottom:16px;letter-spacing:.5px;
+    }
+
+    /* Title */
+    .hero-title{font-size:clamp(24px,7vw,42px);font-weight:900;line-height:1.2;margin-bottom:12px;}
+    .hero-title .t1{display:block;color:var(--white);}
+    .hero-title .t2{
+      display:block;
+      background:linear-gradient(90deg,var(--gold2),var(--gold),#FFA500);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+
+    .hero-sub{font-size:13px;color:var(--dim);line-height:1.8;margin-bottom:22px;}
+
+    /* NEXT DRAW */
+    .draw-box{
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(201,168,76,.2);
+      border-radius:16px;padding:12px 18px;margin-bottom:20px;
+    }
+    .draw-lbl{font-size:12px;color:var(--dim);font-weight:600;text-align:right;}
+    .draw-val{font-size:20px;font-weight:900;color:var(--gold2);letter-spacing:1px;}
+
+    /* COUNTDOWN */
+    .countdown{display:flex;gap:8px;justify-content:center;margin-bottom:22px;}
+    .cd-box{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(201,168,76,.18);
+      border-radius:14px;padding:10px 12px;min-width:62px;text-align:center;
+    }
+    .cd-num{font-size:26px;font-weight:900;background:linear-gradient(180deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+    .cd-lbl{font-size:10px;color:var(--dim);margin-top:3px;font-weight:700;letter-spacing:.5px;}
+    .cd-sep{font-size:24px;font-weight:900;color:var(--gold);align-self:center;margin-top:-10px;animation:blink 1s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
+
+    /* PILLS */
+    .pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:22px;}
+    .pill{
+      display:flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:50px;padding:6px 14px;
+      font-size:12px;font-weight:700;color:var(--white);
+    }
+    .pill .pv{background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900;}
+
+    /* HERO CTA */
+    .hero-cta{
+      display:inline-flex;align-items:center;gap:10px;
+      background:linear-gradient(90deg,var(--red),#8B0018);
+      color:var(--white);border:none;border-radius:50px;
+      padding:15px 42px;font-family:'Cairo',sans-serif;
+      font-size:16px;font-weight:900;cursor:pointer;
+      box-shadow:0 0 28px rgba(200,16,46,.4),0 6px 18px rgba(0,0,0,.4);
+      transition:transform .15s;
+    }
+    .hero-cta:active{transform:scale(.96);}
+
+    /* ── TICKER ── */
+    .ticker{
+      position:sticky;top:60px;z-index:50;
+      overflow:hidden;padding:8px 0;
+      background:linear-gradient(90deg,rgba(10,25,49,.98),rgba(13,35,64,.98));
+      border-top:1px solid rgba(200,16,46,.4);
+      border-bottom:1px solid rgba(200,16,46,.4);
+    }
+    .tk-badge{
+      position:absolute;right:0;top:0;bottom:0;z-index:2;
+      display:flex;align-items:center;padding:0 12px;
+      background:linear-gradient(90deg,transparent,rgba(10,25,49,1) 30%);
+      gap:6px;white-space:nowrap;
+    }
+    .tk-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink .8s infinite;}
+    .tk-lbl{font-size:11px;font-weight:800;color:var(--gold);}
+    .tk-inner{display:flex;white-space:nowrap;animation:tkScroll 65s linear infinite;}
+    @keyframes tkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ti{display:inline-flex;align-items:center;gap:10px;padding:0 24px;border-right:1px solid rgba(200,16,46,.2);}
+    .ti-name{font-size:13px;font-weight:700;}
+    .ti-phone{font-size:12px;color:var(--dim);direction:ltr;}
+    .ti-amt{font-size:13px;font-weight:900;color:var(--gold2);}
+
+    /* ── SECTION ── */
+    .sec{max-width:560px;margin:0 auto;padding:50px 18px;position:relative;z-index:2;}
+    .sec-hd{text-align:center;margin-bottom:28px;}
+    .sec-tag{
+      display:inline-block;
+      background:linear-gradient(135deg,rgba(200,16,46,.2),rgba(200,16,46,.06));
+      border:1px solid rgba(200,16,46,.4);
+      border-radius:50px;padding:5px 16px;
+      font-size:11px;font-weight:800;color:var(--red2);margin-bottom:10px;letter-spacing:.5px;
+    }
+    .sec-title{font-size:22px;font-weight:900;color:var(--white);line-height:1.3;}
+    .sec-title span{background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .red-bar{width:44px;height:3px;margin:10px auto 0;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:2px;}
+
+    .divider{height:1px;margin:0 18px;background:linear-gradient(90deg,transparent,rgba(200,16,46,.25),transparent);}
+
+    /* ── GRAND PRIZES ── */
+    .grand-cards{display:flex;flex-direction:column;gap:14px;margin-bottom:14px;}
+    .grand-card{
+      border-radius:20px;overflow:hidden;
+      border:1px solid rgba(201,168,76,.2);
+      background:linear-gradient(160deg,rgba(13,35,64,.8),rgba(10,25,49,.95));
+      position:relative;
+    }
+    /* top accent line */
+    .grand-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red));z-index:1;}
+    .gc-img{
+      width:100%;height:185px;
+      background:linear-gradient(135deg,rgba(200,16,46,.08),rgba(10,25,49,.6));
+      position:relative;overflow:hidden;
+      border-bottom:1px solid rgba(201,168,76,.1);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .gc-img::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent 0,transparent 16px,rgba(200,16,46,.04) 16px,rgba(200,16,46,.04) 18px);}
+    .gc-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .gc-body{padding:16px 18px;}
+    .gc-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:linear-gradient(135deg,var(--red),#8B0018);
+      border-radius:50px;padding:4px 14px;
+      font-size:11px;font-weight:800;color:var(--white);margin-bottom:10px;
+    }
+    .gc-name{font-size:19px;font-weight:900;color:var(--white);margin-bottom:4px;}
+    .gc-desc{font-size:13px;color:var(--dim);line-height:1.6;}
+
+    /* ── PRIZE GRID ── */
+    .prize-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .prize-card{
+      border-radius:16px;overflow:hidden;
+      border:1px solid rgba(201,168,76,.12);
+      background:linear-gradient(160deg,rgba(13,35,64,.7),rgba(10,25,49,.95));
+      position:relative;
+    }
+    .prize-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--gold));z-index:1;}
+    .pi-img{
+      width:100%;height:115px;
+      background:linear-gradient(135deg,rgba(200,16,46,.07),rgba(10,25,49,.7));
+      position:relative;overflow:hidden;
+      border-bottom:1px solid rgba(201,168,76,.08);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .pi-img::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent 0,transparent 10px,rgba(200,16,46,.03) 10px,rgba(200,16,46,.03) 12px);}
+    .pi-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .pi-body{padding:12px;}
+    .pi-name{font-size:13px;font-weight:800;color:var(--white);margin-bottom:3px;}
+    .pi-desc{font-size:11px;color:var(--dim);}
+    .pi-tag{display:inline-block;margin-top:6px;background:rgba(200,16,46,.15);border:1px solid rgba(200,16,46,.3);border-radius:50px;padding:2px 10px;font-size:11px;font-weight:700;color:var(--red2);}
+
+    /* ── SLIDESHOW ── */
+    .sl-wrap{position:relative;border-radius:20px;overflow:hidden;}
+    .sl-cont{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+    .slide{
+      min-width:100%;height:224px;
+      background:linear-gradient(135deg,rgba(200,16,46,.08),rgba(10,25,49,.85));
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid rgba(201,168,76,.1);border-radius:20px;
+      overflow:hidden;position:relative;
+    }
+    .slide::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent 0,transparent 16px,rgba(200,16,46,.03) 16px,rgba(200,16,46,.03) 18px);}
+    .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .sl-nav{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:2;}
+    .sdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s;}
+    .sdot.on{background:var(--red2);transform:scale(1.4);}
+    .sarr{
+      position:absolute;top:50%;transform:translateY(-50%);
+      width:36px;height:36px;border-radius:50%;
+      background:rgba(10,25,49,.8);backdrop-filter:blur(4px);
+      border:1px solid rgba(201,168,76,.3);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--gold2);font-size:18px;cursor:pointer;z-index:2;
+    }
+    .sarr:active{background:rgba(200,16,46,.3);}
+    .sarr.prev{right:10px;} .sarr.next{left:10px;}
+
+    /* ── LIVE FEED ── */
+    .feed-item{
+      display:flex;align-items:center;gap:12px;
+      padding:12px 14px;border-radius:14px;
+      border:1px solid transparent;
+      background:rgba(255,255,255,.02);
+      margin-bottom:10px;transition:all .4s;
+    }
+    .feed-item.new{
+      border-color:rgba(201,168,76,.2);
+      background:linear-gradient(135deg,rgba(13,35,64,.6),rgba(10,25,49,.9));
+      animation:feedSlide .5s ease;
+    }
+    @keyframes feedSlide{from{opacity:0;transform:translateX(14px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+    .f-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--red),#600010);display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid rgba(201,168,76,.25);}
+    .f-info{flex:1;}
+    .f-name{font-size:13px;font-weight:700;}
+    .f-phone{font-size:11px;color:var(--dim);direction:ltr;display:inline-block;}
+    .f-amt{text-align:left;white-space:nowrap;}
+    .f-num{font-size:15px;font-weight:900;color:var(--gold2);}
+    .f-unit{font-size:11px;color:var(--dim);}
+
+    /* ── BOTTOM CTA ── */
+    .btm-cta{text-align:center;padding:44px 18px 18px;position:relative;z-index:2;}
+    .btm-title{font-size:clamp(20px,5.5vw,30px);font-weight:900;margin-bottom:10px;}
+    .btm-title span{background:linear-gradient(90deg,var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .btm-sub{font-size:13px;color:var(--dim);line-height:1.7;}
+
+    footer{text-align:center;padding:16px;border-top:1px solid rgba(200,16,46,.15);font-size:12px;color:var(--dim);position:relative;z-index:2;}
+
+    /* ── FR ── */
+    body.fr .tk-badge{right:auto;left:0;background:linear-gradient(270deg,transparent,rgba(10,25,49,1) 30%);}
+    body.fr .sarr.prev{right:auto;left:10px;} body.fr .sarr.next{left:auto;right:10px;}
+    body.fr .lang-btn{right:auto;left:18px;}
+    body.fr .draw-lbl{text-align:left;}
+  </style>
+</head>
+<body>
+
+<canvas id="cvs"></canvas>
+
+<!-- LANG -->
+<button class="lang-btn" id="lang-btn" onclick="toggleLang()">🌐</button>
+
+<!-- FIXED CTA -->
+<div class="fixed-cta">
+  <button class="fixed-cta-btn" onclick="goLogin()">
+    <span id="fixed-cta-text">سجّل الآن وشارك في السحب اليومي</span>
+  </button>
+</div>
+
+<!-- SPINNER -->
+<div class="spinner-ov" id="spinner-ov">
+  <div class="sp-logo"><img src="images/logo1.png" alt=""></div>
+  <div class="sp-ball"></div>
+  <div class="sp-txt" id="sp-txt">جاري التوجيه...</div>
+</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <img src="images/logo2.png" alt="مصرفي" onerror="this.src='images/logo.png'">
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="h-base"></div>
+  <div class="h-img"></div>
+  <div class="h-ov"></div>
+  <div class="h-stripes"></div>
+  <div class="h-glow"></div>
+  <div class="h-corner tl"></div>
+  <div class="h-corner br"></div>
+
+  <div class="hero-logo">
+    <img src="images/logo2.png" alt="مصرفي" onerror="this.src='images/logo.png'">
+  </div>
+
+  <div class="hero-inner">
+    <div class="wc-badge">⚽ <span id="h-badge">مسابقة مصرفي اليومية | كأس العالم 2026</span></div>
+
+    <h1 class="hero-title">
+      <span class="t1" id="h-t1">جوائز مصرفي الكبرى</span>
+      <span class="t2" id="h-t2">اربح كل يوم مع مصرفي</span>
+    </h1>
+    <p class="hero-sub" id="h-sub">سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية</p>
+
+    <div class="draw-box">
+      <div>
+        <div class="draw-lbl" id="nd-label">السحب القادم خلال</div>
+        <div class="draw-val" id="nd-value">--:--:--</div>
+      </div>
+    </div>
+
+    <div class="countdown">
+      <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-lbl" id="cd-hl">ساعة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-lbl" id="cd-ml">دقيقة</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-lbl" id="cd-sl">ثانية</div></div>
+    </div>
+
+    <div class="pills">
+      <div class="pill"><span id="mp1">أكبر مسابقة في موريتانيا</span></div>
+      <div class="pill"><span id="mp2">جوائز يومية <span class="pv">35.000</span> أوقية</span></div>
+      <div class="pill"><span id="mp3">تسجيل في ثوانٍ</span></div>
+      <div class="pill"><span id="mp4">فرصتك مع مصرفي</span></div>
+    </div>
+
+    <button class="hero-cta" onclick="goLogin()">
+      <span id="h-cta">سجّل الآن</span>
+    </button>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tk-badge"><div class="tk-dot"></div><span class="tk-lbl" id="tk-lbl">رابحون مباشر</span></div>
+  <div class="tk-inner" id="tk-inner"></div>
+</div>
+
+<!-- PRIZES -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-tag" id="pr-tag">الجوائز</div>
+    <div class="sec-title" id="pr-title">جوائز <span>مصرفي</span> الأسطورية</div>
+    <div class="red-bar"></div>
+  </div>
+  <div class="grand-cards">
+    <div class="grand-card">
+      <div class="gc-img"><img src="images/prize_car.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="gc-body">
+        <div class="gc-badge"><span id="gp1b">الجائزة الكبرى الأولى</span></div>
+        <div class="gc-name" id="gp1n">سيارة فارهة</div>
+        <div class="gc-desc" id="gp1d">سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي</div>
+      </div>
+    </div>
+    <div class="grand-card">
+      <div class="gc-img"><img src="images/prize_house.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="gc-body">
+        <div class="gc-badge"><span id="gp2b">الجائزة الكبرى الثانية</span></div>
+        <div class="gc-name" id="gp2n">منزل فاخر</div>
+        <div class="gc-desc" id="gp2d">منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة</div>
+      </div>
+    </div>
+  </div>
+  <div class="prize-grid">
+    <div class="prize-card">
+      <div class="pi-img"><img src="images/prize_iphone.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pi-body"><div class="pi-name">iPhone 17 Pro</div><div class="pi-desc" id="pp1">أحدث إصدار من Apple</div><span class="pi-tag">×10</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pi-img"><img src="images/prize_cash.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pi-body"><div class="pi-name" id="pp3n">جوائز نقدية يومية</div><div class="pi-desc" id="pp3">500 — 35.000 أوقية</div><span class="pi-tag" id="pp3t">كل يوم</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pi-img"><img src="images/prize_voucher.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pi-body"><div class="pi-name" id="pp4n">قسائم شراء</div><div class="pi-desc" id="pp4">قسائم تسوق حصرية</div><span class="pi-tag" id="pp4t">أسبوعياً</span></div>
+    </div>
+    <div class="prize-card">
+      <div class="pi-img"><img src="images/prize_extra.png" alt="" onerror="this.style.display='none'"></div>
+      <div class="pi-body"><div class="pi-name" id="pp5n">مفاجآت يومية</div><div class="pi-desc" id="pp5">جوائز إضافية مفاجئة</div><span class="pi-tag" id="pp5t">كل يوم</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SLIDESHOW -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-tag" id="sl-tag">معرض الصور</div>
+    <div class="sec-title" id="sl-title">لحظات <span>مصرفي</span></div>
+    <div class="red-bar"></div>
+  </div>
+  <div class="sl-wrap">
+    <div class="sl-cont" id="sl-cont"></div>
+    <button class="sarr prev" onclick="prevSlide()">›</button>
+    <button class="sarr next" onclick="nextSlide()">‹</button>
+    <div class="sl-nav" id="sl-nav"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- LIVE FEED -->
+<div class="sec">
+  <div class="sec-hd">
+    <div class="sec-tag" id="lw-tag">مباشر</div>
+    <div class="sec-title" id="lw-title">آخر <span>الرابحين</span></div>
+    <div class="red-bar"></div>
+  </div>
+  <div id="live-feed"></div>
+</div>
+
+<div class="btm-cta">
+  <div class="btm-title" id="bc-title">لا تفوّت سحب اليوم<br><span id="bc-t2">سجّل مع مصرفي الآن!</span></div>
+  <div class="btm-sub" id="bc-sub">انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم</div>
+</div>
+
+<footer><p id="footer-txt">© 2025 مصرفي by BMCI — جميع الحقوق محفوظة</p></footer>
+
+<!-- AUDIO -->
+<audio id="intro-audio" src="images/marr.wav" preload="auto"></audio>
+
+<script>
+/* ── TRANSLATIONS ── */
+const T={
+  ar:{
+    badge:'مسابقة مصرفي اليومية | كأس العالم 2026',
+    t1:'جوائز مصرفي الكبرى',t2:'اربح كل يوم مع مصرفي',
+    sub:'سيارة فارهة • منزل فاخر • iPhone 17 Pro • جوائز نقدية يومية تصل إلى 35.000 أوقية',
+    ndLbl:'السحب القادم خلال',
+    mp1:'أكبر مسابقة في موريتانيا',mp3:'تسجيل في ثوانٍ',mp4:'فرصتك مع مصرفي',
+    cta:'سجّل الآن',fixedCta:'سجّل الآن وشارك في السحب اليومي',spinTxt:'جاري التوجيه...',
+    tkLbl:'رابحون مباشر',
+    prTag:'الجوائز',prTitle:['جوائز ','مصرفي',' الأسطورية'],
+    gp1b:'الجائزة الكبرى الأولى',gp1n:'سيارة فارهة',gp1d:'سيارة فاخرة تُسلَّم للفائز في حفل مصرفي الشهري الاحتفالي',
+    gp2b:'الجائزة الكبرى الثانية',gp2n:'منزل فاخر',gp2d:'منزل عصري في قلب نواكشوط، الجائزة الكبرى لعائلة موريتانية محظوظة',
+    pp1:'أحدث إصدار من Apple',
+    pp3n:'جوائز نقدية يومية',pp3:'500 — 35.000 أوقية',pp3t:'كل يوم',
+    pp4n:'قسائم شراء',pp4:'قسائم تسوق حصرية',pp4t:'أسبوعياً',
+    pp5n:'مفاجآت يومية',pp5:'جوائز إضافية مفاجئة',pp5t:'كل يوم',
+    slTag:'معرض الصور',slTitle:['لحظات ','مصرفي'],
+    lwTag:'مباشر',lwTitle:['آخر ','الرابحين'],
+    bcTitle:'لا تفوّت سحب اليوم',bcT2:'سجّل مع مصرفي الآن!',
+    bcSub:'انضم لمئات الآلاف من عملاء مصرفي وكن الفائز القادم',
+    footer:'© 2025 مصرفي by BMCI — جميع الحقوق محفوظة',
+    hours:'ساعة',min:'دقيقة',sec:'ثانية',mru:'أوقية',
+  },
+  fr:{
+    badge:'Concours Masrvi | Coupe du Monde 2026',
+    t1:'Les grands prix Masrvi',t2:'Gagnez chaque jour avec Masrvi',
+    sub:'Voiture luxe • Maison de rêve • iPhone 17 Pro • Prix espèces jusqu\'à 35 000 MRU',
+    ndLbl:'Prochain tirage dans',
+    mp1:'Le plus grand concours en Mauritanie',mp3:'Inscription en secondes',mp4:'Votre chance avec Masrvi',
+    cta:"S'inscrire",fixedCta:"S'inscrire au tirage quotidien",spinTxt:'Redirection...',
+    tkLbl:'Gagnants en direct',
+    prTag:'Prix',prTitle:['Les prix ','Masrvi',' légendaires'],
+    gp1b:'1er Grand Prix',gp1n:'Voiture de luxe',gp1d:'Une voiture luxueuse remise lors de la cérémonie mensuelle Masrvi',
+    gp2b:'2ème Grand Prix',gp2n:'Maison de luxe',gp2d:'Une maison moderne dans le cœur de Nouakchott',
+    pp1:'Dernier modèle Apple',
+    pp3n:'Prix en espèces quotidiens',pp3:'500 — 35 000 MRU',pp3t:'Chaque jour',
+    pp4n:'Bons d\'achat',pp4:'Bons de shopping exclusifs',pp4t:'Hebdomadaire',
+    pp5n:'Surprises quotidiennes',pp5:'Prix surprises supplémentaires',pp5t:'Chaque jour',
+    slTag:'Galerie',slTitle:['Moments ','Masrvi'],
+    lwTag:'En direct',lwTitle:['Derniers ','gagnants'],
+    bcTitle:'Ne ratez pas le tirage du jour',bcT2:'Inscrivez-vous avec Masrvi !',
+    bcSub:'Rejoignez des centaines de milliers de clients Masrvi',
+    footer:'© 2025 Masrvi by BMCI — Tous droits réservés',
+    hours:'Heures',min:'Min',sec:'Sec',mru:'MRU',
+  }
+};
+
+let lang=localStorage.getItem('appLang')||'ar';
+
+function applyLang(){
+  const t=T[lang];
+  document.getElementById('h-badge').textContent=t.badge;
+  document.getElementById('h-t1').textContent=t.t1;
+  document.getElementById('h-t2').textContent=t.t2;
+  document.getElementById('h-sub').textContent=t.sub;
+  document.getElementById('nd-label').textContent=t.ndLbl;
+  document.getElementById('mp1').textContent=t.mp1;
+  document.getElementById('mp3').textContent=t.mp3;
+  document.getElementById('mp4').textContent=t.mp4;
+  document.getElementById('h-cta').textContent=t.cta;
+  document.getElementById('fixed-cta-text').textContent=t.fixedCta;
+  document.getElementById('sp-txt').textContent=t.spinTxt;
+  document.getElementById('tk-lbl').textContent=t.tkLbl;
+  document.getElementById('pr-tag').textContent=t.prTag;
+  document.getElementById('pr-title').innerHTML=t.prTitle[0]+'<span>'+t.prTitle[1]+'</span>'+t.prTitle[2];
+  document.getElementById('gp1b').textContent=t.gp1b;
+  document.getElementById('gp1n').textContent=t.gp1n;
+  document.getElementById('gp1d').textContent=t.gp1d;
+  document.getElementById('gp2b').textContent=t.gp2b;
+  document.getElementById('gp2n').textContent=t.gp2n;
+  document.getElementById('gp2d').textContent=t.gp2d;
+  document.getElementById('pp1').textContent=t.pp1;
+  document.getElementById('pp3n').textContent=t.pp3n;
+  document.getElementById('pp3').textContent=t.pp3;
+  document.getElementById('pp3t').textContent=t.pp3t;
+  document.getElementById('pp4n').textContent=t.pp4n;
+  document.getElementById('pp4').textContent=t.pp4;
+  document.getElementById('pp4t').textContent=t.pp4t;
+  document.getElementById('pp5n').textContent=t.pp5n;
+  document.getElementById('pp5').textContent=t.pp5;
+  document.getElementById('pp5t').textContent=t.pp5t;
+  document.getElementById('sl-tag').textContent=t.slTag;
+  document.getElementById('sl-title').innerHTML=t.slTitle[0]+'<span>'+t.slTitle[1]+'</span>';
+  document.getElementById('lw-tag').textContent=t.lwTag;
+  document.getElementById('lw-title').innerHTML=t.lwTitle[0]+'<span>'+t.lwTitle[1]+'</span>';
+  document.getElementById('bc-title').innerHTML=t.bcTitle+'<br><span id="bc-t2">'+t.bcT2+'</span>';
+  document.getElementById('bc-sub').textContent=t.bcSub;
+  document.getElementById('footer-txt').textContent=t.footer;
+  document.getElementById('cd-hl').textContent=t.hours;
+  document.getElementById('cd-ml').textContent=t.min;
+  document.getElementById('cd-sl').textContent=t.sec;
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.body.classList.toggle('fr',lang==='fr');
+  buildTicker(); updateFeed(); buildSlides();
+}
+function toggleLang(){lang=lang==='ar'?'fr':'ar';localStorage.setItem('appLang',lang);applyLang();}
+
+function goLogin(){
+  document.getElementById('spinner-ov').classList.add('active');
+  setTimeout(()=>{window.location.href='login.html';},2000);
+}
+
+/* COUNTDOWN */
+function updateCD(){
+  const now=new Date(); const midnight=new Date();
+  midnight.setUTCHours(23,59,59,999);
+  let d=midnight-now; if(d<0)d=0;
+  const h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000);
+  const str=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('nd-value').textContent=str;
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+
+/* WINNERS */
+const W=[
+  {name:'عيشة بنت مبروك',phone:'22***48',amount:5000,icon:'👩'},
+  {name:'سيدي إبراهيم بن مالي',phone:'36***12',amount:2000,icon:'👨'},
+  {name:'فاطمة بنت أحمد',phone:'44***79',amount:15000,icon:'👩'},
+  {name:'محمد ولد سيدي',phone:'22***03',amount:1500,icon:'👨'},
+  {name:'مريم بنت محمود',phone:'33***61',amount:7500,icon:'👩'},
+  {name:'أحمد ولد بكر',phone:'46***27',amount:3000,icon:'👨'},
+  {name:'خديجة بنت يحيى',phone:'22***55',amount:500,icon:'👩'},
+  {name:'إسماعيل ولد الشيخ',phone:'39***84',amount:10000,icon:'👨'},
+  {name:'زينب بنت عبد الله',phone:'44***13',amount:2500,icon:'👩'},
+  {name:'محمود ولد محمد',phone:'27***66',amount:35000,icon:'👨'},
+  {name:'حواء بنت الطيب',phone:'23***91',amount:1000,icon:'👩'},
+  {name:'الشيخ ولد أمين',phone:'41***38',amount:20000,icon:'👨'},
+  {name:'سلمى بنت كريم',phone:'36***74',amount:3500,icon:'👩'},
+  {name:'عبد الرحمن ولد علي',phone:'22***20',amount:5500,icon:'👨'},
+  {name:'آمنة بنت يوسف',phone:'48***05',amount:1500,icon:'👩'},
+  {name:'موسى ولد إدريس',phone:'31***47',amount:8000,icon:'👨'},
+  {name:'رقية بنت داود',phone:'44***62',amount:2000,icon:'👩'},
+  {name:'البشير ولد حمد',phone:'26***89',amount:12000,icon:'👨'},
+  {name:'نفيسة بنت عمر',phone:'37***34',amount:750,icon:'👩'},
+  {name:'يحيى ولد المختار',phone:'43***16',amount:25000,icon:'👨'},
+  {name:'بتول بنت إبراهيم',phone:'22***73',amount:4000,icon:'👩'},
+  {name:'الحسن ولد أحمد',phone:'34***58',amount:6000,icon:'👨'},
+  {name:'أسماء بنت محمد',phone:'47***41',amount:1500,icon:'👩'},
+  {name:'عثمان ولد سيدي',phone:'29***97',amount:3000,icon:'👨'},
+  {name:'بلقيس بنت الحسن',phone:'44***22',amount:5000,icon:'👩'},
+  {name:'علي ولد ماديو',phone:'38***63',amount:9000,icon:'👨'},
+  {name:'صفية بنت عبد',phone:'22***85',amount:2500,icon:'👩'},
+  {name:'ابراهيم ولد عبد الله',phone:'45***39',amount:18000,icon:'👨'},
+  {name:'هند بنت أحمد',phone:'32***07',amount:500,icon:'👩'},
+  {name:'محفوظ ولد اعل',phone:'24***54',amount:30000,icon:'👨'},
+];
+
+function buildTicker(){
+  const t=T[lang];
+  document.getElementById('tk-inner').innerHTML=
+    [...W,...W].map(w=>`<div class="ti"><span>${w.icon}</span><span class="ti-name">${w.name}</span><span class="ti-phone">${w.phone}</span><span class="ti-amt">${w.amount.toLocaleString()} ${t.mru}</span></div>`).join('');
+}
+
+let fi=0;
+function addFeed(){
+  const t=T[lang];const w=W[fi%W.length];fi++;
+  const feed=document.getElementById('live-feed');
+  const el=document.createElement('div');el.className='feed-item new';
+  el.innerHTML=`<div class="f-av">${w.icon}</div><div class="f-info"><div class="f-name">${w.name}</div><div class="f-phone">${w.phone}</div></div><div class="f-amt"><div class="f-num">${w.amount.toLocaleString()}</div><div class="f-unit">${t.mru}</div></div>`;
+  feed.insertBefore(el,feed.firstChild);
+  setTimeout(()=>el.classList.remove('new'),600);
+  while(feed.children.length>6)feed.removeChild(feed.lastChild);
+}
+function updateFeed(){document.getElementById('live-feed').innerHTML='';fi=0;for(let i=0;i<6;i++)addFeed();}
+setInterval(addFeed,2000);
+
+/* SLIDES */
+const SL=[
+  {f:'images/slide1.png'},{f:'images/slide2.png'},
+  {f:'images/slide3.jpg'},{f:'images/slide4.jpg'},{f:'images/slide5.jpg'},
+];
+let cs=0,st;
+function buildSlides(){
+  const c=document.getElementById('sl-cont'),n=document.getElementById('sl-nav');
+  c.innerHTML='';n.innerHTML='';
+  SL.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='slide';
+    d.innerHTML=`<img src="${s.f}" alt="" onerror="this.style.display='none'">`;
+    c.appendChild(d);
+    const dot=document.createElement('div');dot.className='sdot'+(i===0?' on':'');
+    dot.onclick=()=>goSl(i);n.appendChild(dot);
+  });
+  goSl(0);
+}
+function goSl(n){
+  cs=n;
+  document.getElementById('sl-cont').style.transform=`translateX(${lang==='ar'?'':'-'}${n*100}%)`;
+  document.querySelectorAll('.sdot').forEach((d,i)=>d.classList.toggle('on',i===n));
+}
+function nextSlide(){goSl((cs+1)%SL.length);resetST();}
+function prevSlide(){goSl((cs-1+SL.length)%SL.length);resetST();}
+function resetST(){clearInterval(st);st=setInterval(nextSlide,4000);}
+
+/* PARTICLES — red & gold sparks */
+(function(){
+  const cv=document.getElementById('cvs'),cx=cv.getContext('2d');
+  let pts=[];
+  const colors=['rgba(200,16,46,A)','rgba(201,168,76,A)','rgba(255,215,0,A)','rgba(255,255,255,A)'];
+  function resize(){
+    cv.width=window.innerWidth;cv.height=window.innerHeight;
+    pts=Array.from({length:Math.min(Math.floor(cv.width*cv.height/8000),65)},()=>({
+      x:Math.random()*cv.width,y:Math.random()*cv.height,
+      vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,
+      r:Math.random()*1.8+.4,
+      phase:Math.random()*Math.PI*2,
+      col:colors[Math.floor(Math.random()*colors.length)]
+    }));
+  }
+  function draw(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    const now=Date.now()*.001;
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;
+      if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0;
+      const a=(Math.sin(now+p.phase)*.3+.5)*.4;
+      cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      cx.fillStyle=p.col.replace('A',a);cx.fill();
+    });
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<85){
+        cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);
+        cx.strokeStyle=`rgba(200,16,46,${.06*(1-dist/85)})`;cx.lineWidth=.5;cx.stroke();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+/* AUDIO */
+setTimeout(()=>{document.getElementById('intro-audio').play().catch(()=>{});},4000);
+
+/* INIT */
+applyLang();
+st=setInterval(nextSlide,4000);
+setInterval(updateCD,1000);updateCD();
+</script>
+</body>
+</html>
