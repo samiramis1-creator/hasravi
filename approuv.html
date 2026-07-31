@@ -12,14 +12,14 @@
       --navy:#0A1931; --navy2:#0D2340; --navy3:#071020;
       --gold:#C9A84C; --gold2:#FFD700; --gold3:#B8941A;
       --white:#fff; --dim:rgba(255,255,255,.65); --dim2:rgba(255,255,255,.08);
+      --teal:#14C9A8;
     }
     html,body{min-height:100%;background:var(--navy);}
     body{font-family:'Cairo',sans-serif;color:var(--white);overflow-x:hidden;}
 
-    /* ── CANVAS ── */
     #cvs{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-    /* ── HEADER ── */
+    /* HEADER */
     .hdr{
       position:relative;z-index:2;
       display:flex;align-items:center;justify-content:space-between;
@@ -28,140 +28,125 @@
     }
     .back-btn{
       display:flex;align-items:center;gap:8px;
-      background:rgba(200,16,46,.15);
-      border:1px solid rgba(200,16,46,.35);
+      background:var(--dim2);
+      border:1px solid rgba(255,255,255,.15);
       border-radius:50px;padding:8px 16px;
       color:var(--white);font-family:'Cairo',sans-serif;
       font-size:14px;font-weight:700;cursor:pointer;
       transition:background .2s;
     }
-    .back-btn:active{background:rgba(200,16,46,.3);}
+    .back-btn:active{background:rgba(255,255,255,.15);}
     .back-arr{font-size:18px;}
     .lang-btn{
-      background:none;border:1.5px solid var(--gold);
-      color:var(--gold);padding:7px 16px;border-radius:20px;
+      background:none;border:1.5px solid var(--teal);
+      color:var(--teal);padding:7px 16px;border-radius:20px;
       font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;cursor:pointer;
       transition:all .2s;
     }
-    .lang-btn:active{background:var(--gold);color:var(--navy);}
+    .lang-btn:active{background:var(--teal);color:var(--navy);}
 
-    /* ── MAIN ── */
+    /* MAIN */
     .main{
       position:relative;z-index:2;
       display:flex;flex-direction:column;align-items:center;
       padding:0 18px 50px;
     }
 
-    /* ── LOGO ── */
+    /* LOGO */
     .logo-row{
-      display:flex;align-items:center;gap:12px;
-      margin-bottom:18px;
-    }
-    .logo-row img.li{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid rgba(201,168,76,.4);}
-    .logo-row img.lb{height:32px;object-fit:contain;border-radius:8px;}
-
-    /* ── STADIUM HERO ── */
-    .stadium-hero{
-      width:100%;border-radius:24px;overflow:hidden;
-      position:relative;margin-bottom:22px;
-      background:radial-gradient(ellipse 120% 80% at 50% 100%,rgba(200,16,46,.15) 0%,var(--navy2) 60%,var(--navy3) 100%);
-      border:1px solid rgba(201,168,76,.2);
-      padding:30px 20px 24px;text-align:center;
-    }
-    /* Pitch lines overlay */
-    .pitch-lines{
-      position:absolute;inset:0;z-index:0;opacity:.06;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 100%,rgba(255,255,255,.8) 0%,transparent 70%),
-        linear-gradient(0deg,rgba(255,255,255,.4) 1px,transparent 1px) 0 0 / 100% 30px,
-        linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px) 0 0 / 30px 100%;
-    }
-    /* Diagonal stripes */
-    .diag{
-      position:absolute;inset:0;z-index:0;opacity:.04;
-      background:repeating-linear-gradient(-55deg,transparent 0,transparent 18px,var(--red) 18px,var(--red) 20px);
-    }
-    /* Top gold line */
-    .stadium-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--red3),var(--gold2),var(--red3));z-index:1;}
-
-    /* Trophy icon */
-    .trophy-wrap{position:relative;z-index:2;margin-bottom:14px;}
-    .trophy-ring{
-      width:80px;height:80px;border-radius:50%;margin:0 auto;
-      background:linear-gradient(135deg,var(--red),var(--red3));
       display:flex;align-items:center;justify-content:center;
-      box-shadow:0 0 40px rgba(200,16,46,.5),0 0 80px rgba(200,16,46,.15);
+      margin-bottom:22px;
+    }
+    .logo-row img{
+      height:64px;max-width:180px;object-fit:contain;
+      filter:drop-shadow(0 0 14px rgba(20,201,168,.25));
+    }
+    .logo-row .logo-fb{
+      display:none;width:60px;height:60px;border-radius:16px;
+      background:linear-gradient(135deg,var(--teal),#0CA88A);
+      align-items:center;justify-content:center;font-size:28px;
+    }
+
+    /* SUCCESS HERO */
+    .success-hero{
+      width:100%;border-radius:22px;
+      background:linear-gradient(160deg,rgba(14,31,69,.9),rgba(6,14,34,.95));
+      border:1px solid rgba(20,201,168,.2);
+      padding:28px 20px 22px;text-align:center;
+      margin-bottom:20px;position:relative;overflow:hidden;
+    }
+    .success-hero::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,transparent,var(--teal),transparent);
+    }
+    /* subtle grid */
+    .success-hero::after{
+      content:'';position:absolute;inset:0;z-index:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+      background-size:32px 32px;
+    }
+
+    .check-wrap{position:relative;z-index:1;margin-bottom:16px;}
+    .check-ring{
+      width:82px;height:82px;border-radius:50%;margin:0 auto;
+      background:linear-gradient(135deg,var(--teal),#0CA88A);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 40px rgba(20,201,168,.4),0 0 80px rgba(20,201,168,.1);
       animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both;
       position:relative;
     }
-    .trophy-ring::before{
-      content:'';position:absolute;inset:-5px;border-radius:50%;
-      border:2px solid rgba(201,168,76,.35);
-      animation:spinRing 4s linear infinite;
-    }
-    .trophy-ring::after{
-      content:'';position:absolute;inset:-12px;border-radius:50%;
-      border:1px dashed rgba(201,168,76,.15);
-      animation:spinRing 8s linear infinite reverse;
+    .check-ring::before{
+      content:'';position:absolute;inset:-6px;border-radius:50%;
+      border:2px solid rgba(20,201,168,.3);
+      animation:spinRing 3s linear infinite;
     }
     @keyframes spinRing{to{transform:rotate(360deg)}}
     @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-    .trophy-emoji{font-size:40px;line-height:1;}
+    .check-ring svg{width:44px;height:44px;fill:none;stroke:white;stroke-width:3;}
 
-    /* Ball decorations */
-    .ball-deco{
-      position:absolute;border-radius:50%;
-      background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.15),rgba(0,0,0,.3));
-      border:1px solid rgba(255,255,255,.1);
-      z-index:1;animation:floatBall 5s ease-in-out infinite;
-    }
-    .ball-deco.b1{width:28px;height:28px;top:18px;right:22px;animation-delay:0s;}
-    .ball-deco.b2{width:18px;height:18px;top:35px;left:28px;animation-delay:1.8s;}
-    .ball-deco.b3{width:22px;height:22px;bottom:30px;right:30px;animation-delay:3.2s;}
-    @keyframes floatBall{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(20deg)}}
+    .sh-title{position:relative;z-index:1;font-size:20px;font-weight:900;margin-bottom:6px;}
+    .sh-sub{position:relative;z-index:1;font-size:13px;color:var(--dim);line-height:1.6;}
 
-    .sh-title{position:relative;z-index:2;font-size:20px;font-weight:900;margin-bottom:6px;}
-    .sh-sub{position:relative;z-index:2;font-size:13px;color:var(--dim);line-height:1.6;}
-
-    /* ── GUARANTEE BOX ── */
+    /* GUARANTEE */
     .guarantee{
       width:100%;
-      background:linear-gradient(135deg,rgba(200,16,46,.1),rgba(200,16,46,.04));
-      border:1px solid rgba(200,16,46,.3);
-      border-radius:20px;padding:18px 18px;margin-bottom:18px;
-      position:relative;overflow:hidden;
+      background:linear-gradient(135deg,rgba(20,201,168,.08),rgba(20,201,168,.02));
+      border:1px solid rgba(20,201,168,.25);
+      border-radius:18px;padding:16px 18px;margin-bottom:18px;
     }
-    .guarantee::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold2),var(--red));}
     .gt-row{display:flex;align-items:flex-start;gap:14px;}
     .gt-icon{font-size:26px;flex-shrink:0;margin-top:2px;}
     .gt-text{font-size:13px;color:var(--dim);line-height:1.7;}
-    .gt-text strong{color:var(--gold2);font-weight:800;}
+    .gt-text strong{color:var(--teal);font-weight:800;}
 
-    /* ── SHARE CARD ── */
+    /* SHARE CARD */
     .share-card{
       width:100%;
       background:rgba(255,255,255,.04);
-      border:1px solid rgba(201,168,76,.2);
+      border:1px solid rgba(255,255,255,.09);
       border-radius:20px;padding:20px 18px;margin-bottom:18px;
       position:relative;overflow:hidden;
     }
-    .share-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold3),var(--gold2),var(--gold3));}
-    .sc-title{font-size:15px;font-weight:800;color:var(--gold2);text-align:center;margin-bottom:6px;}
+    .share-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--teal),transparent);
+    }
+    .sc-title{font-size:15px;font-weight:800;color:var(--teal);text-align:center;margin-bottom:6px;}
     .sc-desc{font-size:13px;color:var(--dim);text-align:center;line-height:1.6;margin-bottom:18px;}
     .sc-desc span{color:var(--gold2);font-weight:800;}
 
-    /* Link box */
     .link-box{
       display:flex;align-items:center;gap:10px;
-      background:rgba(0,0,0,.3);
-      border:1px solid rgba(201,168,76,.2);
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(20,201,168,.2);
       border-radius:12px;padding:11px 14px;margin-bottom:16px;
     }
-    .link-url{flex:1;font-size:14px;font-weight:700;color:var(--gold2);direction:ltr;word-break:break-all;}
+    .link-url{flex:1;font-size:13.5px;font-weight:700;color:var(--teal);direction:ltr;word-break:break-all;}
     .copy-icon{background:none;border:none;font-size:20px;cursor:pointer;transition:transform .15s;padding:2px;}
     .copy-icon:active{transform:scale(.85);}
 
-    /* Share buttons */
     .share-btns{display:flex;flex-direction:column;gap:11px;}
     .sh-btn{
       width:100%;display:flex;align-items:center;gap:14px;
@@ -173,38 +158,32 @@
     .sh-btn .sb-ico{font-size:22px;flex-shrink:0;}
     .sh-btn .sb-txt{flex:1;text-align:right;}
     .sh-btn .sb-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px;background:rgba(255,255,255,.2);}
-    .sh-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 4px 20px rgba(37,211,102,.25);}
-    .sh-btn.cp{background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.3);color:var(--white);}
-    .sh-btn.cp.done{background:rgba(201,168,76,.15);border-color:var(--gold2);}
+    .sh-btn.wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 4px 20px rgba(37,211,102,.2);}
+    .sh-btn.cp{background:rgba(255,255,255,.05);border:1px solid rgba(20,201,168,.25);color:var(--white);}
+    .sh-btn.cp.done{background:rgba(20,201,168,.12);border-color:var(--teal);}
 
-    /* ── PROGRESS ── */
+    /* PROGRESS */
     .progress-card{
       width:100%;
       background:rgba(255,255,255,.03);
       border:1px solid rgba(255,255,255,.07);
       border-radius:20px;padding:18px;margin-bottom:18px;
     }
-    .pg-title{font-size:14px;font-weight:800;color:var(--white);text-align:center;margin-bottom:14px;}
+    .pg-title{font-size:14px;font-weight:800;color:var(--white);text-align:center;margin-bottom:16px;}
 
-    /* 5 player slots */
-    .players-row{
-      display:flex;justify-content:space-between;gap:6px;margin-bottom:14px;
-    }
-    .player-slot{
-      flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
-    }
+    .players-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:14px;}
+    .player-slot{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
     .ps-circle{
       width:48px;height:48px;border-radius:50%;
-      background:rgba(255,255,255,.06);
+      background:rgba(255,255,255,.05);
       border:2px solid rgba(255,255,255,.1);
       display:flex;align-items:center;justify-content:center;
-      font-size:22px;transition:all .3s;
-      position:relative;
+      font-size:20px;transition:all .35s;position:relative;
     }
     .ps-circle.done{
-      background:linear-gradient(135deg,var(--red),var(--red3));
-      border-color:var(--gold2);
-      box-shadow:0 0 18px rgba(200,16,46,.4);
+      background:linear-gradient(135deg,var(--teal),#0CA88A);
+      border-color:rgba(20,201,168,.6);
+      box-shadow:0 0 16px rgba(20,201,168,.35);
     }
     .ps-circle.done::after{
       content:'✓';position:absolute;bottom:-2px;right:-2px;
@@ -216,33 +195,30 @@
     }
     .ps-num{font-size:11px;font-weight:700;color:var(--dim);}
 
-    /* Progress bar */
-    .pg-bar-wrap{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:8px;}
-    .pg-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--gold2));transition:width .5s ease;}
+    .pg-bar-wrap{height:7px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:8px;}
+    .pg-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal),#0CA88A);transition:width .5s ease;}
     .pg-count{font-size:13px;color:var(--dim);text-align:center;}
-    .pg-count span{color:var(--gold2);font-size:16px;font-weight:900;}
+    .pg-count span{color:var(--teal);font-size:16px;font-weight:900;}
 
-    /* ── HOME BUTTON ── */
+    /* HOME BTN */
     .home-btn{
       width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
       border-radius:50px;padding:14px;
       font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;
       color:var(--white);cursor:pointer;text-decoration:none;
       transition:background .2s;
     }
-    .home-btn:active{background:rgba(255,255,255,.12);}
+    .home-btn:active{background:rgba(255,255,255,.1);}
 
-    /* ── TOAST ── */
+    /* TOAST */
     .toast{
       position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
-      background:linear-gradient(135deg,var(--red),var(--red3));
-      color:var(--white);font-family:'Cairo',sans-serif;
-      font-size:14px;font-weight:800;
+      background:var(--teal);color:var(--navy);
+      font-family:'Cairo',sans-serif;font-size:14px;font-weight:800;
       padding:12px 24px;border-radius:50px;
-      box-shadow:0 8px 24px rgba(0,0,0,.4);
-      border:1px solid rgba(201,168,76,.3);
+      box-shadow:0 8px 24px rgba(0,0,0,.3);
       opacity:0;transition:all .3s;pointer-events:none;
       white-space:nowrap;z-index:999;
     }
@@ -252,14 +228,12 @@
     body.fr .back-btn{flex-direction:row-reverse;}
     body.fr .back-arr{transform:scaleX(-1);display:inline-block;}
     body.fr .sh-btn .sb-txt{text-align:left;}
-    body.fr .sc-desc,.sc-title{text-align:center;}
   </style>
 </head>
 <body>
 
 <canvas id="cvs"></canvas>
 
-<!-- HEADER -->
 <header class="hdr">
   <button class="lang-btn" id="lang-btn" onclick="toggleLang()">FR</button>
   <button class="back-btn" onclick="window.location.href='index.html'">
@@ -272,24 +246,20 @@
 
   <!-- LOGO -->
   <div class="logo-row">
-    <img class="li" src="images/logo1.png" alt="" onerror="this.style.display='none'">
-    <img class="lb" src="images/logo2.png" alt="" onerror="this.style.display='none'">
+    <img src="images/logo.png" alt="مصرفي"
+         onerror="this.style.display='none';document.getElementById('logo-fb').style.display='flex';">
+    <div class="logo-fb" id="logo-fb">🏦</div>
   </div>
 
-  <!-- STADIUM HERO -->
-  <div class="stadium-hero">
-    <div class="pitch-lines"></div>
-    <div class="diag"></div>
-    <div class="ball-deco b1">⚽</div>
-    <div class="ball-deco b2">⚽</div>
-    <div class="ball-deco b3">⚽</div>
-    <div class="trophy-wrap">
-      <div class="trophy-ring">
-        <span class="trophy-emoji">🏆</span>
+  <!-- SUCCESS HERO -->
+  <div class="success-hero">
+    <div class="check-wrap">
+      <div class="check-ring">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
     </div>
-    <div class="sh-title" id="sh-title">تسجيلك في الملعب! 🎉</div>
-    <div class="sh-sub" id="sh-sub">خطوة أخيرة لضمان دخولك الملعب الكبير</div>
+    <div class="sh-title" id="sh-title">تسجيلك مكتمل! 🎉</div>
+    <div class="sh-sub" id="sh-sub">خطوة أخيرة لضمان دخولك السحب</div>
   </div>
 
   <!-- GUARANTEE -->
@@ -297,19 +267,19 @@
     <div class="gt-row">
       <span class="gt-icon">🛡️</span>
       <div class="gt-text" id="gt-text">
-        لضمان دخولك في السحب الرسمي لجوائز مصرفي، يجب مشاركة رابط المسابقة مع <strong>5 أشخاص على الأقل</strong>. مثل كرة القدم — الفوز يحتاج فريقاً!
+        لضمان دخولك في السحب الرسمي لجوائز مصرفي، يجب مشاركة رابط المسابقة مع <strong>5 أشخاص على الأقل</strong>. بعد اكتمال المشاركات سيتم تأكيد اسمك في قائمة المتسابقين.
       </div>
     </div>
   </div>
 
   <!-- SHARE CARD -->
   <div class="share-card">
-    <div class="sc-title" id="sc-title">🔗 شارك الرابط وادخل الملعب</div>
+    <div class="sc-title" id="sc-title">🔗 شارك الرابط الآن</div>
     <div class="sc-desc" id="sc-desc">أرسل إلى <span>5 أصدقاء أو أفراد عائلتك</span> لضمان مشاركتك في السحب</div>
 
     <div class="link-box">
       <button class="copy-icon" onclick="copyLink()">📋</button>
-      <div class="link-url">https://masravi.it.com</div>
+      <div class="link-url">https://masravibmci.com</div>
     </div>
 
     <div class="share-btns">
@@ -328,24 +298,22 @@
 
   <!-- PROGRESS -->
   <div class="progress-card">
-    <div class="pg-title" id="pg-title">⚽ تقدم الفريق — اكتمل 5 لاعبين للفوز</div>
-
-    <div class="players-row" id="players-row">
-      <div class="player-slot" id="ps0"><div class="ps-circle" id="pc0">👤</div><div class="ps-num">1</div></div>
-      <div class="player-slot" id="ps1"><div class="ps-circle" id="pc1">👤</div><div class="ps-num">2</div></div>
-      <div class="player-slot" id="ps2"><div class="ps-circle" id="pc2">👤</div><div class="ps-num">3</div></div>
-      <div class="player-slot" id="ps3"><div class="ps-circle" id="pc3">👤</div><div class="ps-num">4</div></div>
-      <div class="player-slot" id="ps4"><div class="ps-circle" id="pc4">👤</div><div class="ps-num">5</div></div>
+    <div class="pg-title" id="pg-title">تقدم المشاركات</div>
+    <div class="players-row">
+      <div class="player-slot"><div class="ps-circle" id="pc0">👤</div><div class="ps-num">1</div></div>
+      <div class="player-slot"><div class="ps-circle" id="pc1">👤</div><div class="ps-num">2</div></div>
+      <div class="player-slot"><div class="ps-circle" id="pc2">👤</div><div class="ps-num">3</div></div>
+      <div class="player-slot"><div class="ps-circle" id="pc3">👤</div><div class="ps-num">4</div></div>
+      <div class="player-slot"><div class="ps-circle" id="pc4">👤</div><div class="ps-num">5</div></div>
     </div>
-
     <div class="pg-bar-wrap"><div class="pg-bar" id="pg-bar" style="width:0%"></div></div>
-    <div class="pg-count" id="pg-count"><span id="share-count">0</span> / 5</div>
+    <div class="pg-count"><span id="share-count">0</span> / 5</div>
   </div>
 
   <!-- HOME -->
   <a class="home-btn" href="index.html">
-    <span>🏟️</span>
-    <span id="home-txt">العودة إلى الملعب الرئيسي</span>
+    <span>🏠</span>
+    <span id="home-txt">العودة إلى الصفحة الرئيسية</span>
   </a>
 
 </div>
@@ -353,147 +321,196 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SHARE_URL='https://masravi.it.com';
+var SHARE_URL = 'https://masravibmci.com';
 
-const T={
-  ar:{
+var T = {
+  ar: {
     pageTitle:'ضمان المشاركة | مصرفي',
-    back:'الصفحة الرئيسية',langBtn:'FR',
-    shTitle:'تسجيلك في الملعب! 🎉',
-    shSub:'خطوة أخيرة لضمان دخولك الملعب الكبير',
-    gtText:'لضمان دخولك في السحب الرسمي لجوائز مصرفي، يجب مشاركة رابط المسابقة مع <strong>5 أشخاص على الأقل</strong>. مثل كرة القدم — الفوز يحتاج فريقاً!',
-    scTitle:'🔗 شارك الرابط وادخل الملعب',
+    back:'الصفحة الرئيسية', langBtn:'FR',
+    shTitle:'تسجيلك مكتمل! 🎉',
+    shSub:'خطوة أخيرة لضمان دخولك السحب',
+    gtText:'لضمان دخولك في السحب الرسمي لجوائز مصرفي، يجب مشاركة رابط المسابقة مع <strong>5 أشخاص على الأقل</strong>. بعد اكتمال المشاركات سيتم تأكيد اسمك في قائمة المتسابقين.',
+    scTitle:'🔗 شارك الرابط الآن',
     scDesc:'أرسل إلى <span>5 أصدقاء أو أفراد عائلتك</span> لضمان مشاركتك في السحب',
-    sbWa:'مشاركة عبر WhatsApp',sbWaTag:'مباشر',
-    sbCp:'نسخ الرابط',sbCpTag:'نسخ',
-    pgTitle:'⚽ تقدم الفريق — اكتمل 5 لاعبين للفوز',
-    homeTxt:'العودة إلى الملعب الرئيسي',
+    sbWa:'مشاركة عبر WhatsApp', sbWaTag:'مباشر',
+    sbCp:'نسخ الرابط', sbCpTag:'نسخ',
+    pgTitle:'تقدم المشاركات',
+    homeTxt:'العودة إلى الصفحة الرئيسية',
     toastCopied:'✅ تم نسخ الرابط!',
     toastShared:'✅ تمت المشاركة!',
-    waMsg:'⚽ مصرفي يدعوك للمشاركة في أكبر مسابقة!\n🏆 سيارة فارهة • منزل فاخر • iPhone 17\n💰 جوائز نقدية تصل إلى 35.000 أوقية\n🔗 سجّل الآن:',
+    waMsg:'🎉 مصرفي يهديك فرصة الفوز!\n🏆 سيارة فارهة • منزل فاخر • iPhone 17\n💰 جوائز نقدية تصل إلى 35.000 أوقية\n\nسجّل الآن:\n'
   },
-  fr:{
+  fr: {
     pageTitle:'Garantie de participation | Masrvi',
-    back:'Page principale',langBtn:'AR',
-    shTitle:'Vous êtes dans le stade ! 🎉',
-    shSub:'Dernière étape pour garantir votre entrée',
-    gtText:'Pour garantir votre entrée dans le tirage officiel Masrvi, partagez le lien avec <strong>au moins 5 personnes</strong>. Comme au foot — il faut une équipe pour gagner !',
-    scTitle:'🔗 Partagez et entrez dans le stade',
+    back:'Page principale', langBtn:'AR',
+    shTitle:'Inscription complète ! 🎉',
+    shSub:'Dernière étape pour garantir votre participation',
+    gtText:'Pour garantir votre entrée dans le tirage officiel Masrvi, partagez le lien avec <strong>au moins 5 personnes</strong>. Une fois les partages complétés, votre nom sera confirmé sur la liste.',
+    scTitle:'🔗 Partagez le lien maintenant',
     scDesc:'Envoyez à <span>5 amis ou membres de famille</span> pour garantir votre participation',
-    sbWa:'Partager via WhatsApp',sbWaTag:'Direct',
-    sbCp:'Copier le lien',sbCpTag:'Copier',
-    pgTitle:'⚽ Progression — Complétez 5 joueurs pour gagner',
-    homeTxt:'Retour au stade principal',
+    sbWa:'Partager via WhatsApp', sbWaTag:'Direct',
+    sbCp:'Copier le lien', sbCpTag:'Copier',
+    pgTitle:'Progression des partages',
+    homeTxt:'Retour à la page principale',
     toastCopied:'✅ Lien copié !',
     toastShared:'✅ Partagé !',
-    waMsg:'⚽ Masrvi vous invite au plus grand concours !\n🏆 Voiture • Maison • iPhone 17\n💰 Prix jusqu\'à 35 000 MRU\n🔗 Inscrivez-vous :',
+    waMsg:"🎉 Masrvi vous offre une chance de gagner !\n🏆 Voiture luxe • Maison de rêve • iPhone 17\n💰 Prix jusqu'à 35 000 MRU\n\nInscrivez-vous :\n"
   }
 };
 
-let lang=localStorage.getItem('appLang')||'ar';
-let shareCount=parseInt(localStorage.getItem('shareCount')||'0');
+var lang = localStorage.getItem('appLang') || 'ar';
+var shareCount = parseInt(localStorage.getItem('shareCount') || '0');
 
-function applyLang(){
-  const t=T[lang];
-  document.title=t.pageTitle;
-  document.getElementById('page-title').textContent=t.pageTitle;
-  document.getElementById('back-text').textContent=t.back;
-  document.getElementById('lang-btn').textContent=t.langBtn;
-  document.getElementById('sh-title').textContent=t.shTitle;
-  document.getElementById('sh-sub').textContent=t.shSub;
-  document.getElementById('gt-text').innerHTML=t.gtText;
-  document.getElementById('sc-title').textContent=t.scTitle;
-  document.getElementById('sc-desc').innerHTML=t.scDesc;
-  document.getElementById('sb-wa').textContent=t.sbWa;
-  document.getElementById('sb-wa-tag').textContent=t.sbWaTag;
-  document.getElementById('sb-cp').textContent=t.sbCp;
-  document.getElementById('sb-cp-tag').textContent=t.sbCpTag;
-  document.getElementById('pg-title').textContent=t.pgTitle;
-  document.getElementById('home-txt').textContent=t.homeTxt;
-  document.documentElement.lang=lang;
-  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.body.classList.toggle('fr',lang==='fr');
+function applyLang() {
+  var t = T[lang];
+  document.title = t.pageTitle;
+  document.getElementById('page-title').textContent = t.pageTitle;
+  document.getElementById('back-text').textContent = t.back;
+  document.getElementById('lang-btn').textContent = t.langBtn;
+  document.getElementById('sh-title').textContent = t.shTitle;
+  document.getElementById('sh-sub').textContent = t.shSub;
+  document.getElementById('gt-text').innerHTML = t.gtText;
+  document.getElementById('sc-title').textContent = t.scTitle;
+  document.getElementById('sc-desc').innerHTML = t.scDesc;
+  document.getElementById('sb-wa').textContent = t.sbWa;
+  document.getElementById('sb-wa-tag').textContent = t.sbWaTag;
+  document.getElementById('sb-cp').textContent = t.sbCp;
+  document.getElementById('sb-cp-tag').textContent = t.sbCpTag;
+  document.getElementById('pg-title').textContent = t.pgTitle;
+  document.getElementById('home-txt').textContent = t.homeTxt;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.body.classList.toggle('fr', lang === 'fr');
 }
-function toggleLang(){lang=lang==='ar'?'fr':'ar';localStorage.setItem('appLang',lang);applyLang();}
 
-/* COUNTER */
-function updateCounter(){
-  const pct=Math.min(shareCount/5*100,100);
-  document.getElementById('pg-bar').style.width=pct+'%';
-  document.getElementById('share-count').textContent=Math.min(shareCount,5);
-  for(let i=0;i<5;i++){
-    const c=document.getElementById('pc'+i);
-    if(i<shareCount){
+function toggleLang() {
+  lang = lang === 'ar' ? 'fr' : 'ar';
+  localStorage.setItem('appLang', lang);
+  applyLang();
+}
+
+function updateCounter() {
+  var pct = Math.min(shareCount / 5 * 100, 100);
+  document.getElementById('pg-bar').style.width = pct + '%';
+  document.getElementById('share-count').textContent = Math.min(shareCount, 5);
+  for (var i = 0; i < 5; i++) {
+    var c = document.getElementById('pc' + i);
+    if (i < shareCount) {
       c.classList.add('done');
-      c.textContent='⚽';
+      c.textContent = '✓';
     } else {
       c.classList.remove('done');
-      c.textContent='👤';
+      c.textContent = '👤';
     }
   }
 }
 
-function recordShare(){
-  if(shareCount<5){shareCount++;localStorage.setItem('shareCount',shareCount);}
+function recordShare() {
+  if (shareCount < 5) {
+    shareCount++;
+    localStorage.setItem('shareCount', shareCount);
+  }
   updateCounter();
 }
 
-/* SHARE */
-function shareWA(){
-  const t=T[lang];
-  window.open('https://wa.me/?text='+encodeURIComponent(t.waMsg+'\n'+SHARE_URL),'_blank');
-  recordShare();showToast(t.toastShared);
+function shareWA() {
+  var t = T[lang];
+  window.open('https://wa.me/?text=' + encodeURIComponent(t.waMsg + SHARE_URL), '_blank');
+  recordShare();
+  showToast(t.toastShared);
 }
 
-function copyLink(){
-  const t=T[lang];
-  const btn=document.getElementById('copy-btn');
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(SHARE_URL).then(()=>{
-      recordShare();showToast(t.toastCopied);
-      btn.classList.add('done');
-      document.getElementById('sb-cp').textContent='✅ '+t.toastCopied;
-      setTimeout(()=>{btn.classList.remove('done');document.getElementById('sb-cp').textContent=t.sbCp;},2500);
-    });
+function copyLink() {
+  var t = T[lang];
+  var btn = document.getElementById('copy-btn');
+  var sbCpEl = document.getElementById('sb-cp');
+
+  function afterCopy() {
+    recordShare();
+    showToast(t.toastCopied);
+    btn.classList.add('done');
+    sbCpEl.textContent = t.toastCopied;
+    setTimeout(function() {
+      btn.classList.remove('done');
+      sbCpEl.textContent = t.sbCp;
+    }, 2500);
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(SHARE_URL).then(afterCopy).catch(function() { fallbackCopy(afterCopy); });
   } else {
-    const el=document.createElement('textarea');el.value=SHARE_URL;
-    document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);
-    recordShare();showToast(t.toastCopied);
+    fallbackCopy(afterCopy);
   }
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
+function fallbackCopy(cb) {
+  var el = document.createElement('textarea');
+  el.value = SHARE_URL;
+  el.style.position = 'fixed'; el.style.opacity = '0';
+  document.body.appendChild(el);
+  el.focus(); el.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(el);
+  cb();
 }
 
-/* ── CANVAS — red & gold particles ── */
-(function(){
-  const cv=document.getElementById('cvs'),cx=cv.getContext('2d');let pts=[];
-  const cols=['rgba(200,16,46,A)','rgba(201,168,76,A)','rgba(255,215,0,A)','rgba(255,255,255,A)'];
-  function resize(){
-    cv.width=window.innerWidth;cv.height=window.innerHeight;
-    pts=Array.from({length:50},()=>({
-      x:Math.random()*cv.width,y:Math.random()*cv.height,
-      vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
-      r:Math.random()*1.8+.4,
-      phase:Math.random()*Math.PI*2,
-      col:cols[Math.floor(Math.random()*cols.length)]
-    }));
+function showToast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2800);
+}
+
+/* PARTICLES */
+(function() {
+  var cv = document.getElementById('cvs');
+  var cx = cv.getContext('2d');
+  var pts = [];
+  var cols = [
+    'rgba(20,201,168,A)',
+    'rgba(201,168,76,A)',
+    'rgba(255,255,255,A)'
+  ];
+
+  function resize() {
+    cv.width = window.innerWidth;
+    cv.height = window.innerHeight;
+    pts = [];
+    for (var i = 0; i < 45; i++) {
+      pts.push({
+        x: Math.random() * cv.width,
+        y: Math.random() * cv.height,
+        vx: (Math.random() - .5) * .28,
+        vy: (Math.random() - .5) * .28,
+        r: Math.random() * 1.6 + .3,
+        phase: Math.random() * Math.PI * 2,
+        col: cols[Math.floor(Math.random() * cols.length)]
+      });
+    }
   }
-  function draw(){
-    cx.clearRect(0,0,cv.width,cv.height);const now=Date.now()*.001;
-    pts.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;
-      if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0;
-      const a=(Math.sin(now+p.phase)*.3+.5)*.35;
-      cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      cx.fillStyle=p.col.replace('A',a);cx.fill();
-    });
+
+  function draw() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    var now = Date.now() * .001;
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = cv.width;
+      if (p.x > cv.width) p.x = 0;
+      if (p.y < 0) p.y = cv.height;
+      if (p.y > cv.height) p.y = 0;
+      var a = (Math.sin(now + p.phase) * .3 + .5) * .3;
+      cx.beginPath();
+      cx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      cx.fillStyle = p.col.replace('A', a);
+      cx.fill();
+    }
     requestAnimationFrame(draw);
   }
-  window.addEventListener('resize',resize);resize();draw();
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
 })();
 
 applyLang();
